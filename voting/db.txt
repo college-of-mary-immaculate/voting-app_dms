@@ -1,0 +1,54 @@
+users:
+	user-id
+	stud_id
+	fullname
+	course
+	year_level
+	email
+	password
+	
+	
+positions;
+	position_id
+	position_name
+	
+
+candidates:
+	candidate_id
+	fullname
+	position_id
+	partylist
+	photo
+	bio
+
+votes:
+	vote_id
+	user_id
+	position_id
+	candidate_id
+	
+
+foreign key:
+	user_id, position_id, candidate_id (all unique)
+
+
+election_settings:
+	id
+	election_title
+	school_year
+	status
+	start_datetime
+	end_datetime
+
+live results:
+	SELECT 
+    		p.position_name,
+    		c.fullname,
+    		COUNT(v.vote_id) AS total_votes
+	FROM candidates c
+	LEFT JOIN votes v 
+    		ON c.candidate_id = v.candidate_id
+	JOIN positions p 
+    		ON c.position_id = p.position_id
+	GROUP BY c.candidate_id
+	ORDER BY p.position_id, total_votes DESC;

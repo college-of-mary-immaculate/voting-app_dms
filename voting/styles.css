@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #F3F4F6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.login-card {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  width: 350px;
+  text-align: center;
+}
+
+.login-card .logo { width: 80px; margin-bottom: 1rem; }
+
+.login-card h2 { color: #2563EB; margin-bottom: 1.5rem; }
+
+.login-card input {
+  width: 100%;           
+  max-width: 350px;
+  padding: 0.8rem;
+  margin: 0.5rem 0;     
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box; 
+}
+
+.login-card button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #2563EB;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.login-card button:hover { background-color: #1d4ed8; }
+
+.login-card a { display: block; margin-top: 1rem; color: #2563EB; text-decoration: none; }
+.login-card a:hover { text-decoration: underline; }
+
+.footer { font-size: 0.8rem; margin-top: 1rem; color: #888; }
+
