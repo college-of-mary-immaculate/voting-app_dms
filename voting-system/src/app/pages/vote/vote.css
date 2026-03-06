@@ -1,0 +1,152 @@
+.vote-page {
+  padding: 20px;
+  text-align: center;
+  background: #f3f4f6;
+  min-height: 100vh;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+.results-btn-container {
+  margin-bottom: 20px;
+}
+
+.results-btn {
+  background: #facc15;
+  color: #111827;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.results-btn:hover {
+  background: #eab308;
+}
+
+.positions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+.position-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 900px;
+}
+
+.position-title {
+  margin-bottom: 20px;
+  color: #2563eb;
+}
+
+.candidate-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.candidate-card {
+  background: #e5e7eb;
+  border-radius: 10px;
+  padding: 15px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.candidate-card:hover {
+  transform: scale(1.05);
+}
+
+.candidate-photo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.candidate-name {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.candidate-bio {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 8px 0;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+  transition: background 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+button.voted {
+  background: #22c55e;
+  cursor: default;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+}
+
+.modal-buttons button {
+  width: 80px;
+  padding: 6px 0;
+  border-radius: 5px;
+}

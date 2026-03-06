@@ -1,0 +1,32 @@
+<div class="manage-candidates">
+  <h1>Manage Candidates</h1>
+
+  <button class="back-btn" (click)="goBack()">← Back</button>
+  <button class="add-btn">+ Add Candidate</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Photo</th>
+        <th>Full Name</th>
+        <th>Position</th>
+        <th>Election</th>
+        <th>Bio</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let candidate of candidates">
+        <td><img [src]="candidate.photo" alt="{{candidate.fullname}}" class="candidate-photo"></td>
+        <td>{{candidate.fullname}}</td>
+        <td>{{candidate.position_name}}</td>
+        <td>{{candidate.election_title}}</td>
+        <td>{{candidate.bio}}</td>
+        <td>
+          <button class="edit-btn">Edit</button>
+          <button class="delete-btn">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

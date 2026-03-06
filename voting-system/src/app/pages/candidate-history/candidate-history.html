@@ -1,0 +1,24 @@
+<div class="candidate-history">
+  <h1>Candidate History</h1>
+
+  <button class="back-btn" (click)="goBack()">← Back</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Candidate</th>
+        <th>Position</th>
+        <th>Election</th>
+        <th>Votes Received</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let candidate of candidateHistory">
+        <td>{{candidate.fullname}}</td>
+        <td>{{candidate.position_name}}</td>
+        <td>{{candidate.election_title}}</td>
+        <td>{{candidate.votes}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

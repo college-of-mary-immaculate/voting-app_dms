@@ -1,0 +1,38 @@
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f3f4f6;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.admin-dashboard h1 {
+  font-size: 2rem;
+  color: #111827;
+  margin-bottom: 40px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.admin-actions button {
+  padding: 15px 30px;
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.admin-actions button:hover {
+  background: #1d4ed8;
+}

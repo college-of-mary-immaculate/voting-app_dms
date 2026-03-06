@@ -1,0 +1,23 @@
+<div class="results-page">
+  <h1>Election Results</h1>
+
+  <div class="positions-container">
+    <div *ngFor="let position of positions" class="position-card">
+      <h2 class="position-title">{{ position.position_name }}</h2>
+
+      <div class="candidate-list">
+        <div *ngFor="let candidate of position.candidates" class="candidate-card" [class.user-voted]="selectedVotes[position.position_id] === candidate.candidate_id">
+          <img [src]="candidate.photo" alt="{{ candidate.fullname }}" class="candidate-photo">
+          <h3 class="candidate-name">{{ candidate.fullname }}</h3>
+          <p class="candidate-bio">{{ candidate.bio }}</p>
+          <p class="vote-count">{{ candidate.votes }} votes</p>
+          <span *ngIf="selectedVotes[position.position_id] === candidate.candidate_id" class="you-voted-label">Your vote</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="back-btn-container">
+    <button (click)="goBack()">Back to Dashboard</button>
+  </div>
+</div>

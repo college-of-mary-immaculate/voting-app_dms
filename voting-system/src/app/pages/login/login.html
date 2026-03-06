@@ -1,0 +1,43 @@
+<div class="login-container">
+
+  <div class="login-card">
+    <h2>Live Voting System</h2>
+
+    <form (ngSubmit)="login()">
+
+      <div class="input-group">
+        <input 
+          type="text" 
+          placeholder="Username"
+          [(ngModel)]="email"
+          name="email"
+          required
+        >
+      </div>
+
+      <div class="input-group">
+        <input 
+          type="password" 
+          placeholder="Password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        >
+      </div>
+
+      <div class="input-group">
+        <select [(ngModel)]="role" name="role">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <button type="submit" class="login-btn">
+        Login
+      </button>
+
+    </form>
+
+  </div>
+
+</div>

@@ -1,0 +1,52 @@
+<div class="vote-page">
+  <h1>Vote for Your Candidates</h1>
+
+  <!-- Results -->
+  <div class="results-btn-container">
+    <button (click)="goToResults()" class="results-btn">View Results</button>
+  </div>
+
+  <!-- positions and candidates -->
+  <div class="positions-container">
+    <div *ngFor="let position of positions" class="position-card">
+      <h2 class="position-title">{{ position.position_name }}</h2>
+
+      <div class="candidate-list">
+        <div *ngFor="let candidate of position.candidates" class="candidate-card">
+          <img [src]="candidate.photo" alt="{{ candidate.fullname }}" class="candidate-photo">
+          <h3 class="candidate-name">{{ candidate.fullname }}</h3>
+          <p class="candidate-bio">{{ candidate.bio }}</p>
+          <button
+            (click)="openVoteModal(position, candidate)"
+            [disabled]="selectedVotes[position.position_id] && selectedVotes[position.position_id] !== candidate.candidate_id"
+            [class.voted]="selectedVotes[position.position_id] === candidate.candidate_id">
+            {{ selectedVotes[position.position_id] === candidate.candidate_id ? 'Voted' : 'Vote' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- vote confirmation -->
+  <div class="modal" *ngIf="showConfirmModal">
+    <div class="modal-content">
+      <h3>Confirm Vote</h3>
+      <p>Are you sure you want to vote for <strong>{{ currentCandidate?.fullname }}</strong> as <strong>{{ currentPosition?.position_name }}</strong>?</p>
+      <div class="modal-buttons">
+        <button (click)="confirmVote()">OK</button>
+        <button (click)="cancelVote()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- you voted -->
+  <div class="modal" *ngIf="showVotedModal">
+    <div class="modal-content">
+      <h3>Vote Submitted</h3>
+      <p>You voted for <strong>{{ currentCandidate?.fullname }}</strong> as <strong>{{ currentPosition?.position_name }}</strong>.</p>
+      <div class="modal-buttons">
+        <button (click)="closeVotedModal()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

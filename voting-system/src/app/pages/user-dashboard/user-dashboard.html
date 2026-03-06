@@ -1,0 +1,18 @@
+<div class="dashboard">
+  <h1>Student Voting Dashboard</h1>
+  <button class="vote-btn" routerLink="/vote">Go to Voting Page</button>
+
+  <div class="positions-container">
+    <div *ngFor="let position of positions" class="position-card">
+      <h2>{{ position.position_name }}</h2>
+
+      <div class="candidate-list">
+        <div *ngFor="let candidate of position.candidates" class="candidate-card">
+          <img [src]="candidate.photo" alt="{{ candidate.fullname }}" class="candidate-photo">
+          <h3>{{ candidate.fullname }}</h3>
+          <p>{{ candidate.bio }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
