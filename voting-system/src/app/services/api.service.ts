@@ -11,7 +11,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  // Build headers — always include API key, optionally include JWT
   private getHeaders(includeToken = false): HttpHeaders {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',

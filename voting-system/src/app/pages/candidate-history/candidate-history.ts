@@ -35,12 +35,10 @@ export class CandidateHistory implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Load all elections first
     this.apiService.getElections().subscribe({
       next: (elections: any[]) => {
         this.elections = elections;
 
-        // Default to active election, or first one
         const active = elections.find(e => e.election_status === 'active');
         const target = active || elections[0];
 
@@ -64,7 +62,6 @@ export class CandidateHistory implements OnInit {
 
     this.apiService.getResults(electionId).subscribe({
       next: (results: any[]) => {
-        // Match with election title
         const election = this.elections.find(e => e.election_id == electionId);
 
         this.candidateHistory = results.map(r => ({
@@ -78,14 +75,13 @@ export class CandidateHistory implements OnInit {
           vote_count: r.vote_count
         }));
 
-        // Sort by position then votes descending
         this.candidateHistory.sort((a, b) =>
           a.position_name.localeCompare(b.position_name) ||
           b.vote_count - a.vote_count
         );
 
         this.isLoading = false;
-        this.cdr.detectChanges(); // ← add this
+        this.cdr.detectChanges();
 
       },
       error: () => {

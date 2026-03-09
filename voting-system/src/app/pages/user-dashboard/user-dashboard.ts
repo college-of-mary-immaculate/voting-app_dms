@@ -47,12 +47,11 @@ export class UserDashboard implements OnInit {
   constructor(private router: Router, private apiService: ApiService) { }
 
   ngOnInit() {
-    // Get logged in user from localStorage
     const stored = localStorage.getItem('user');
     if (stored) {
       this.user = JSON.parse(stored);
     } else {
-      this.router.navigate(['/']); // redirect if not logged in
+      this.router.navigate(['/']);
       return;
     }
 
@@ -62,7 +61,6 @@ export class UserDashboard implements OnInit {
   loadDashboard() {
     this.isLoading = true;
 
-    // Load all elections, find the active one
     this.apiService.getElections().subscribe({
       next: (elections: Election[]) => {
         this.activeElection = elections.find(e => e.election_status === 'active') || null;
@@ -84,7 +82,6 @@ export class UserDashboard implements OnInit {
   loadCandidates(electionId: number) {
     this.apiService.getCandidatesByElection(electionId).subscribe({
       next: (candidates: Candidate[]) => {
-        // Group candidates by position
         const grouped: { [key: number]: Position } = {};
 
         candidates.forEach(c => {

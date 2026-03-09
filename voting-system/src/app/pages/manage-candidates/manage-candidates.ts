@@ -71,7 +71,6 @@ export class ManageCandidates implements OnInit {
         console.log('candidates data:', data);
         this.candidates = data;
 
-        // Extract unique positions from candidates instead of separate call
         const seen = new Set();
         this.positions = data
           .filter((c: any) => {
@@ -81,8 +80,8 @@ export class ManageCandidates implements OnInit {
           })
           .map((c: any) => ({ position_id: c.position_id, position_name: c.position_name }));
 
-        this.isLoading = false; // ← only one place sets this now
-        this.cdr.detectChanges(); // ← add this
+        this.isLoading = false; 
+        this.cdr.detectChanges();
 
       },
       error: () => {
@@ -92,24 +91,18 @@ export class ManageCandidates implements OnInit {
     });
   }
 
-  loadPositions() {
-    // removed — handled inside loadCandidates now
-  }
-
   loadElections() {
     this.apiService.getElections().subscribe({
       next: (data) => { this.elections = data; }
     });
   }
 
-  // Add
   openAddModal() {
     this.isEditing = false;
     this.currentCandidate = this.emptyCandidate();
     this.showModal = true;
   }
 
-  // Edit
   openEditModal(candidate: Candidate) {
     this.isEditing = true;
     this.currentCandidate = { ...candidate };
@@ -140,7 +133,6 @@ export class ManageCandidates implements OnInit {
     }
   }
 
-  // Delete
   confirmDelete(candidate: Candidate) {
     this.candidateToDelete = candidate;
     this.showDeleteModal = true;

@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require("../db");
 const { verifyApiKey, verifyToken, verifyRole } = require("../middleware/auth");
 
-// GET /elections — all users can view elections
 router.get("/", verifyApiKey, verifyToken, async (req, res) => {
   try {
     const [rows] = await db.query(`SELECT * FROM elections`);
@@ -13,7 +12,6 @@ router.get("/", verifyApiKey, verifyToken, async (req, res) => {
   }
 });
 
-// GET /elections/:id — get single election with candidates
 router.get("/:id", verifyApiKey, verifyToken, async (req, res) => {
   const { id } = req.params;
   try {
@@ -25,7 +23,6 @@ router.get("/:id", verifyApiKey, verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Election not found" });
     }
 
-    // Get candidates for this election with their position
     const [candidates] = await db.query(
       `SELECT c.*, p.position_name 
        FROM candidates c
@@ -40,7 +37,6 @@ router.get("/:id", verifyApiKey, verifyToken, async (req, res) => {
   }
 });
 
-// POST /elections — admin only
 router.post("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   const { start_time, end_time, election_title, election_description } = req.body;
 
@@ -57,10 +53,9 @@ router.post("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res
   }
 });
 
-// PUT /elections/:id/status — admin only, update election status
 router.put("/:id/status", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   const { id } = req.params;
-  const { election_status } = req.body; // 'pending', 'active', 'closed'
+  const { election_status } = req.body;
 
   const validStatuses = ["pending", "active", "closed"];
   if (!validStatuses.includes(election_status)) {
@@ -78,7 +73,6 @@ router.put("/:id/status", verifyApiKey, verifyToken, verifyRole("admin"), async 
   }
 });
 
-// DELETE /elections/:id — admin only
 router.delete("/:id", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   const { id } = req.params;
   try {

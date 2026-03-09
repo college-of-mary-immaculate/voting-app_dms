@@ -7,22 +7,18 @@
     </div>
   </div>
 
-  <!-- Loading -->
   <div *ngIf="isLoading" class="loading">
     Loading...
   </div>
 
-  <!-- Error -->
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
 
-  <!-- No active election -->
   <div *ngIf="!isLoading && !activeElection" class="no-election">
     <p>No active election at the moment. Please check back later.</p>
   </div>
 
-  <!-- Active election -->
   <div *ngIf="!isLoading && activeElection">
     <div class="election-info">
       <h2>{{ activeElection.election_title }}</h2>

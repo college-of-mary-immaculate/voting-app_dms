@@ -27,11 +27,9 @@ export class Login {
       next: (response) => {
         this.isLoading = false;
 
-        // Save token and user info to localStorage
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
 
-        // Redirect based on role from backend
         if (response.user.role === 'admin') {
           this.router.navigate(['/admin']);
         } else {

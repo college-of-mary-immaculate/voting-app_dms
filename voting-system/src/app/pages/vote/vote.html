@@ -1,13 +1,10 @@
 <div class="vote-container">
   <h1>Cast Your Vote</h1>
 
-  <!-- Loading -->
   <div *ngIf="isLoading" class="loading">Loading candidates...</div>
 
-  <!-- Error -->
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-  <!-- Positions -->
   <div *ngIf="!isLoading && positions.length > 0">
     <div *ngFor="let position of positions" class="position-card">
       <div class="position-header">
@@ -37,7 +34,6 @@
     <button class="results-btn" (click)="goToResults()">View Live Results</button>
   </div>
 
-  <!-- Confirm Modal -->
   <div class="modal-overlay" *ngIf="showConfirmModal">
     <div class="modal">
       <h3>Confirm Vote</h3>
@@ -53,7 +49,6 @@
     </div>
   </div>
 
-  <!-- Voted Modal -->
   <div class="modal-overlay" *ngIf="showVotedModal">
     <div class="modal">
       <h3>✅ Vote Cast!</h3>

@@ -45,14 +45,12 @@ export class Results implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // Get user's voted positions from localStorage if available
     const stored = localStorage.getItem('user');
     if (!stored) {
       this.router.navigate(['/']);
       return;
     }
 
-    // Find active election first
     this.apiService.getElections().subscribe({
       next: (elections: any[]) => {
         const active = elections.find(e => e.election_status === 'active');
@@ -64,10 +62,8 @@ export class Results implements OnInit, OnDestroy {
 
         this.electionId = active.election_id;
 
-        // Load initial results from API
         this.loadResults(active.election_id);
 
-        // Load user's voted positions
         this.apiService.checkVoteStatus(active.election_id).subscribe({
           next: (res) => {
             res.votedPositions.forEach((pos_id: number) => {
@@ -76,10 +72,8 @@ export class Results implements OnInit, OnDestroy {
           }
         });
 
-        // Join socket room for live updates
         this.socketService.joinElection(active.election_id);
 
-        // Listen for live vote updates
         this.voteSub = this.socketService.onVoteUpdate().subscribe((results: any[]) => {
           this.groupResults(results, active.election_id);
         });

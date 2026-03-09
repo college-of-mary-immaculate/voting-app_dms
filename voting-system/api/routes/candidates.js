@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require("../db");
 const { verifyApiKey, verifyToken, verifyRole } = require("../middleware/auth");
 
-// GET /candidates — get all candidates
 router.get("/", verifyApiKey, verifyToken, async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -18,7 +17,6 @@ router.get("/", verifyApiKey, verifyToken, async (req, res) => {
   }
 });
 
-// GET /candidates/:id — get single candidate
 router.get("/:id", verifyApiKey, verifyToken, async (req, res) => {
   const { id } = req.params;
   try {
@@ -41,7 +39,6 @@ router.get("/:id", verifyApiKey, verifyToken, async (req, res) => {
   }
 });
 
-// GET /candidates/election/:election_id — get all candidates for a specific election
 router.get("/election/:election_id", verifyApiKey, verifyToken, async (req, res) => {
   const { election_id } = req.params;
   try {
@@ -60,12 +57,10 @@ router.get("/election/:election_id", verifyApiKey, verifyToken, async (req, res)
   }
 });
 
-// POST /candidates — admin only, add candidate
 router.post("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   const { election_id, firstname, lastname, alias, position_id, photo, bio } = req.body;
 
   try {
-    // Check if election exists
     const [election] = await db.query(
       `SELECT election_id FROM elections WHERE election_id = ?`,
       [election_id]
@@ -75,7 +70,6 @@ router.post("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res
       return res.status(404).json({ message: "Election not found" });
     }
 
-    // Check if position exists
     const [position] = await db.query(
       `SELECT position_id FROM position WHERE position_id = ?`,
       [position_id]
@@ -96,7 +90,6 @@ router.post("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res
   }
 });
 
-// PUT /candidates/:id — admin only, update candidate
 router.put("/:id", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   const { id } = req.params;
   const { firstname, lastname, alias, position_id, photo, bio } = req.body;
@@ -122,7 +115,6 @@ router.put("/:id", verifyApiKey, verifyToken, verifyRole("admin"), async (req, r
   }
 });
 
-// DELETE /candidates/:id — admin only
 router.delete("/:id", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   const { id } = req.params;
 

@@ -18,7 +18,7 @@ export class AdminGuard {
 
     const parsed = JSON.parse(user);
     if (parsed.role !== 'admin') {
-      this.router.navigate(['/dashboard']); // redirect voters away from admin pages
+      this.router.navigate(['/dashboard']); 
       return false;
     }
 

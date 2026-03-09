@@ -7,12 +7,10 @@ const { verifyApiKey, verifyToken, verifyRole } = require("../middleware/auth");
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
-// POST /users/register
 router.post("/register", verifyApiKey, async (req, res) => {
   const { student_id, firstname, lastname, alias, course, year_level, email, password, role } = req.body;
 
   try {
-    // Check if email or student_id already exists
     const [existing] = await db.query(
       `SELECT user_id FROM users WHERE email = ? OR student_id = ?`,
       [email, student_id]
@@ -37,7 +35,6 @@ router.post("/register", verifyApiKey, async (req, res) => {
   }
 });
 
-// POST /users/login
 router.post("/login", verifyApiKey, async (req, res) => {
   const { email, password } = req.body;
 
@@ -90,7 +87,6 @@ router.post("/login", verifyApiKey, async (req, res) => {
   }
 });
 
-// GET /users — admin only
 router.get("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -102,12 +98,10 @@ router.get("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res)
   }
 });
 
-// GET /users/:id — admin or the user themselves
 router.get("/:id", verifyApiKey, verifyToken, async (req, res) => {
   const requestedId = parseInt(req.params.id);
   const requester = req.user;
 
-  // Only allow if admin or requesting own profile
   if (requester.role !== "admin" && requester.user_id !== requestedId) {
     return res.status(403).json({ message: "Access denied" });
   }

@@ -34,17 +34,14 @@ app.use("/candidates", verifyApiKey, verifyToken, candidates);
 app.use("/votes", verifyApiKey, verifyToken, votes);
 app.use("/elections", verifyApiKey, verifyToken, elections);
 
-// Socket.io connection
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
-  // Join a specific election room
   socket.on("join_election", (election_id) => {
     socket.join(`election_${election_id}`);
     console.log(`Socket ${socket.id} joined election_${election_id}`);
   });
 
-  // Leave election room
   socket.on("leave_election", (election_id) => {
     socket.leave(`election_${election_id}`);
     console.log(`Socket ${socket.id} left election_${election_id}`);
@@ -55,7 +52,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// Use server.listen instead of app.listen
 server.listen(5000, () => {
   console.log("Server running on port 5000");
 });

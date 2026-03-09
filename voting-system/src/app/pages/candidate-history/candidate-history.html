@@ -5,7 +5,6 @@
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   <div *ngIf="isLoading" class="loading">Loading...</div>
 
-  <!-- Election filter -->
   <div class="election-filter" *ngIf="elections.length > 0">
     <label>Filter by Election: </label>
     <select (change)="loadHistory(+$any($event.target).value)">

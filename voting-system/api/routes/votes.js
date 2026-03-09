@@ -3,13 +3,11 @@ const router = express.Router();
 const db = require("../db");
 const { verifyApiKey, verifyToken, verifyRole } = require("../middleware/auth");
 
-// POST /votes — cast a vote
 router.post("/", verifyApiKey, verifyToken, async (req, res) => {
   const { candidate_id, position_id, election_id } = req.body;
   const user_id = req.user.user_id;
 
   try {
-    // 1. Check if election is active
     const [election] = await db.query(
       `SELECT * FROM elections WHERE election_id = ? AND election_status = 'active'`,
       [election_id]
@@ -18,7 +16,6 @@ router.post("/", verifyApiKey, verifyToken, async (req, res) => {
       return res.status(400).json({ message: "Election is not active" });
     }
 
-    // 2. Check if user already voted for this position
     const [existing] = await db.query(
       `SELECT vote_id FROM votes 
        WHERE user_id = ? AND position_id = ? AND election_id = ?`,
@@ -28,7 +25,6 @@ router.post("/", verifyApiKey, verifyToken, async (req, res) => {
       return res.status(409).json({ message: "You already voted for this position" });
     }
 
-    // 3. Check candidate validity
     const [candidate] = await db.query(
       `SELECT * FROM candidates 
        WHERE candidate_id = ? AND position_id = ? AND election_id = ?`,
@@ -38,14 +34,12 @@ router.post("/", verifyApiKey, verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Candidate not found for this position/election" });
     }
 
-    // 4. Cast the vote
     const [result] = await db.query(
       `INSERT INTO votes (user_id, position_id, candidate_id, election_id)
        VALUES (?, ?, ?, ?)`,
       [user_id, position_id, candidate_id, election_id]
     );
 
-    // 5. Get updated results and emit to election room
     const [updatedResults] = await db.query(
       `SELECT 
          c.candidate_id,
@@ -63,7 +57,6 @@ router.post("/", verifyApiKey, verifyToken, async (req, res) => {
       [election_id, election_id]
     );
 
-    // Emit to everyone watching this election
     req.io.to(`election_${election_id}`).emit("vote_update", updatedResults);
 
     res.status(201).json({ message: "Vote cast successfully", vote_id: result.insertId });
@@ -73,7 +66,6 @@ router.post("/", verifyApiKey, verifyToken, async (req, res) => {
   }
 });
 
-// GET /votes/results/:election_id — get live vote counts per candidate
 router.get("/results/:election_id", verifyApiKey, verifyToken, async (req, res) => {
   const { election_id } = req.params;
   try {
@@ -100,7 +92,6 @@ router.get("/results/:election_id", verifyApiKey, verifyToken, async (req, res) 
   }
 });
 
-// GET /votes/check/:election_id — check if current user already voted
 router.get("/check/:election_id", verifyApiKey, verifyToken, async (req, res) => {
   const { election_id } = req.params;
   const user_id = req.user.user_id;
@@ -118,7 +109,6 @@ router.get("/check/:election_id", verifyApiKey, verifyToken, async (req, res) =>
   }
 });
 
-// GET /votes/admin/:election_id — admin only, full vote list
 router.get("/admin/:election_id", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   const { election_id } = req.params;
   try {
