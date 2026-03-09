@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { ApiService } from '../../services/api.service';
 
 interface Candidate {
   candidate_id: number;
   election_id: number;
-  fullname: string;
+  firstname: string;
+  lastname: string;
+  alias: string;
   position_id: number;
   photo: string;
   bio: string;
@@ -24,38 +27,90 @@ interface Position {
   templateUrl: './vote.html',
   styleUrls: ['./vote.css']
 })
-export class Vote {
-  constructor(private router: Router) {}
-
-  positions: Position[] = [
-    {
-      position_id: 1,
-      position_name: "President",
-      candidates: [
-        { candidate_id: 1, election_id: 1, fullname: "Juan Dela Cruz", position_id: 1, photo: "juandelacruz.jpg", bio: "Senior student, 4th year" },
-        { candidate_id: 2, election_id: 1, fullname: "Maria Santos", position_id: 1, photo: "mariasantos.jpg", bio: "Student council member" }
-      ]
-    },
-    {
-      position_id: 2,
-      position_name: "Vice President",
-      candidates: [
-        { candidate_id: 3, election_id: 1, fullname: "Pedro Reyes", position_id: 2, photo: "pedroreyes.jpg", bio: "Active in community service" },
-        { candidate_id: 4, election_id: 1, fullname: "Ana Lopez", position_id: 2, photo: "analopez.jpg", bio: "Excellent in academics" }
-      ]
-    }
-  ];
-
+export class Vote implements OnInit {
+  positions: Position[] = [];
   selectedVotes: { [position_id: number]: number } = {};
+  activeElectionId: number | null = null;
+  isLoading = true;
+  errorMessage = '';
+  isSubmitting = false;
 
-  //modal
+  // Modal
   showConfirmModal = false;
   showVotedModal = false;
   currentCandidate: Candidate | null = null;
   currentPosition: Position | null = null;
 
+  constructor(private router: Router, private apiService: ApiService) { }
+
+  ngOnInit() {
+    // Check if logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.router.navigate(['/']);
+      return;
+    }
+
+    this.loadElectionAndCandidates();
+  }
+
+  loadElectionAndCandidates() {
+    this.apiService.getElections().subscribe({
+      next: (elections: any[]) => {
+        const active = elections.find(e => e.election_status === 'active');
+        if (!active) {
+          this.errorMessage = 'No active election at the moment.';
+          this.isLoading = false;
+          return;
+        }
+
+        this.activeElectionId = active.election_id;
+
+        // Load candidates and already voted positions in parallel
+        this.apiService.getCandidatesByElection(active.election_id).subscribe({
+          next: (candidates: any[]) => {
+            const grouped: { [key: number]: Position } = {};
+            candidates.forEach(c => {
+              if (!grouped[c.position_id]) {
+                grouped[c.position_id] = {
+                  position_id: c.position_id,
+                  position_name: c.position_name,
+                  candidates: []
+                };
+              }
+              grouped[c.position_id].candidates.push(c);
+            });
+            this.positions = Object.values(grouped);
+            this.isLoading = false;
+          },
+          error: () => {
+            this.errorMessage = 'Failed to load candidates.';
+            this.isLoading = false;
+          }
+        });
+
+        // Check which positions user already voted for
+        this.apiService.checkVoteStatus(active.election_id).subscribe({
+          next: (res) => {
+            res.votedPositions.forEach((pos_id: number) => {
+              this.selectedVotes[pos_id] = -1; // -1 means already voted
+            });
+          }
+        });
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load elections.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  hasVoted(position_id: number): boolean {
+    return !!this.selectedVotes[position_id];
+  }
+
   openVoteModal(position: Position, candidate: Candidate) {
-    if (!this.selectedVotes[position.position_id]) {
+    if (!this.hasVoted(position.position_id)) {
       this.currentCandidate = candidate;
       this.currentPosition = position;
       this.showConfirmModal = true;
@@ -63,11 +118,31 @@ export class Vote {
   }
 
   confirmVote() {
-    if (this.currentPosition && this.currentCandidate) {
-      this.selectedVotes[this.currentPosition.position_id] = this.currentCandidate.candidate_id;
-      this.showConfirmModal = false;
-      this.showVotedModal = true;
-    }
+    if (!this.currentPosition || !this.currentCandidate || !this.activeElectionId) return;
+
+    this.isSubmitting = true;
+
+    this.apiService.castVote({
+      candidate_id: this.currentCandidate.candidate_id,
+      position_id: this.currentPosition.position_id,
+      election_id: this.activeElectionId
+    }).subscribe({
+      next: () => {
+        this.selectedVotes[this.currentPosition!.position_id] = this.currentCandidate!.candidate_id;
+        this.showConfirmModal = false;
+        this.showVotedModal = true;
+        this.isSubmitting = false;
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        this.showConfirmModal = false;
+        if (err.status === 409) {
+          this.errorMessage = 'You already voted for this position.';
+        } else {
+          this.errorMessage = 'Failed to cast vote. Please try again.';
+        }
+      }
+    });
   }
 
   cancelVote() {

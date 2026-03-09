@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { ApiService } from '../../services/api.service';
 
 interface Candidate {
   candidate_id: number;
   election_id: number;
-  fullname: string;
+  firstname: string;
+  lastname: string;
+  alias: string;
   position_id: number;
   photo: string;
   bio: string;
@@ -17,6 +20,15 @@ interface Position {
   candidates: Candidate[];
 }
 
+interface Election {
+  election_id: number;
+  election_title: string;
+  election_description: string;
+  election_status: string;
+  start_time: string;
+  end_time: string;
+}
+
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
@@ -24,40 +36,101 @@ interface Position {
   templateUrl: './user-dashboard.html',
   styleUrls: ['./user-dashboard.css']
 })
-export class UserDashboard {
-  
-  constructor(private router: Router) {}
+export class UserDashboard implements OnInit {
+  user: any = null;
+  activeElection: Election | null = null;
+  positions: Position[] = [];
+  hasVotedPositions: number[] = [];
+  isLoading = true;
+  errorMessage = '';
 
-  //(for display only)
-  positions: Position[] = [
-    {
-      position_id: 1,
-      position_name: "President",
-      candidates: [
-        { candidate_id: 1, election_id: 1, fullname: "Juan Dela Cruz", position_id: 1, photo: "juandelacruz.jpg", bio: "Senior student, 4th year" },
-        { candidate_id: 2, election_id: 1, fullname: "Maria Santos", position_id: 1, photo: "mariasantos.jpg", bio: "Student council member" }
-      ]
-    },
-    {
-      position_id: 2,
-      position_name: "Vice President",
-      candidates: [
-        { candidate_id: 3, election_id: 1, fullname: "Pedro Reyes", position_id: 2, photo: "pedroreyes.jpg", bio: "Active in community service" },
-        { candidate_id: 4, election_id: 1, fullname: "Ana Lopez", position_id: 2, photo: "analopez.jpg", bio: "Excellent in academics" }
-      ]
+  constructor(private router: Router, private apiService: ApiService) { }
+
+  ngOnInit() {
+    // Get logged in user from localStorage
+    const stored = localStorage.getItem('user');
+    if (stored) {
+      this.user = JSON.parse(stored);
+    } else {
+      this.router.navigate(['/']); // redirect if not logged in
+      return;
     }
-  ];
 
-  //this is display only
-  selectedVotes: { [position_id: number]: number } = {};
+    this.loadDashboard();
+  }
 
-  //go to voting page
+  loadDashboard() {
+    this.isLoading = true;
+
+    // Load all elections, find the active one
+    this.apiService.getElections().subscribe({
+      next: (elections: Election[]) => {
+        this.activeElection = elections.find(e => e.election_status === 'active') || null;
+
+        if (this.activeElection) {
+          this.loadCandidates(this.activeElection.election_id);
+          this.checkVoteStatus(this.activeElection.election_id);
+        } else {
+          this.isLoading = false;
+        }
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load elections.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  loadCandidates(electionId: number) {
+    this.apiService.getCandidatesByElection(electionId).subscribe({
+      next: (candidates: Candidate[]) => {
+        // Group candidates by position
+        const grouped: { [key: number]: Position } = {};
+
+        candidates.forEach(c => {
+          if (!grouped[c.position_id]) {
+            grouped[c.position_id] = {
+              position_id: c.position_id,
+              position_name: (c as any).position_name,
+              candidates: []
+            };
+          }
+          grouped[c.position_id].candidates.push(c);
+        });
+
+        this.positions = Object.values(grouped);
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load candidates.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  checkVoteStatus(electionId: number) {
+    this.apiService.checkVoteStatus(electionId).subscribe({
+      next: (res) => {
+        this.hasVotedPositions = res.votedPositions;
+      }
+    });
+  }
+
+  hasVotedFor(position_id: number): boolean {
+    return this.hasVotedPositions.includes(position_id);
+  }
+
   goToVote() {
     this.router.navigate(['/vote']);
   }
 
-  //go to results page
   goToResults() {
     this.router.navigate(['/results']);
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/']);
   }
 }

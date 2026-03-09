@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageCandidates } from './manage-candidates';
+import { ManageCandidates } from './ManageCandidates';
 
 describe('ManageCandidates', () => {
   let component: ManageCandidates;

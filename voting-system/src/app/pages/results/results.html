@@ -1,17 +1,27 @@
 <div class="results-page">
   <h1>Election Results</h1>
 
-  <div class="positions-container">
+  <div *ngIf="isLoading" class="loading">Loading results...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <div *ngIf="!isLoading && positions.length > 0">
     <div *ngFor="let position of positions" class="position-card">
       <h2 class="position-title">{{ position.position_name }}</h2>
-
       <div class="candidate-list">
-        <div *ngFor="let candidate of position.candidates" class="candidate-card" [class.user-voted]="selectedVotes[position.position_id] === candidate.candidate_id">
-          <img [src]="candidate.photo" alt="{{ candidate.fullname }}" class="candidate-photo">
-          <h3 class="candidate-name">{{ candidate.fullname }}</h3>
+        <div *ngFor="let candidate of position.candidates"
+             class="candidate-card"
+             [class.user-voted]="selectedVotes[position.position_id] !== undefined">
+          <img [src]="candidate.photo" alt="{{ candidate.firstname }}"
+               onerror="this.src='assets/default.jpg'"
+               class="candidate-photo">
+          <h3 class="candidate-name">{{ candidate.firstname }} {{ candidate.lastname }}</h3>
+          <p class="alias">"{{ candidate.alias }}"</p>
           <p class="candidate-bio">{{ candidate.bio }}</p>
-          <p class="vote-count">{{ candidate.votes }} votes</p>
-          <span *ngIf="selectedVotes[position.position_id] === candidate.candidate_id" class="you-voted-label">Your vote</span>
+          <p class="vote-count">{{ candidate.vote_count }} votes</p>
+          <span *ngIf="selectedVotes[position.position_id] !== undefined"
+                class="you-voted-label">
+            ✅ Your vote
+          </span>
         </div>
       </div>
     </div>

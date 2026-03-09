@@ -1,24 +1,50 @@
 <div class="candidate-history">
   <h1>Candidate History</h1>
-
   <button class="back-btn" (click)="goBack()">← Back</button>
 
-  <table>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+
+  <!-- Election filter -->
+  <div class="election-filter" *ngIf="elections.length > 0">
+    <label>Filter by Election: </label>
+    <select (change)="loadHistory(+$any($event.target).value)">
+      <option *ngFor="let election of elections"
+              [value]="election.election_id"
+              [selected]="election.election_id === selectedElectionId">
+        {{ election.election_title }} ({{ election.election_status }})
+      </option>
+    </select>
+  </div>
+
+  <table *ngIf="!isLoading && candidateHistory.length > 0">
     <thead>
       <tr>
         <th>Candidate</th>
+        <th>Alias</th>
         <th>Position</th>
         <th>Election</th>
+        <th>Status</th>
         <th>Votes Received</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let candidate of candidateHistory">
-        <td>{{candidate.fullname}}</td>
-        <td>{{candidate.position_name}}</td>
-        <td>{{candidate.election_title}}</td>
-        <td>{{candidate.votes}}</td>
+        <td>{{ candidate.firstname }} {{ candidate.lastname }}</td>
+        <td>{{ candidate.alias }}</td>
+        <td>{{ candidate.position_name }}</td>
+        <td>{{ candidate.election_title }}</td>
+        <td>
+          <span [class]="'status-badge ' + candidate.election_status">
+            {{ candidate.election_status }}
+          </span>
+        </td>
+        <td>{{ candidate.vote_count }}</td>
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="!isLoading && candidateHistory.length === 0" class="no-data">
+    No candidate history found.
+  </div>
 </div>

@@ -1,16 +1,56 @@
 <div class="dashboard">
-  <h1>Student Voting Dashboard</h1>
-  <button class="vote-btn" routerLink="/vote">Go to Voting Page</button>
+  <div class="dashboard-header">
+    <h1>Student Voting Dashboard</h1>
+    <div class="user-info" *ngIf="user">
+      <span>Welcome, {{ user.firstname }} {{ user.lastname }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
 
-  <div class="positions-container">
-    <div *ngFor="let position of positions" class="position-card">
-      <h2>{{ position.position_name }}</h2>
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    Loading...
+  </div>
 
-      <div class="candidate-list">
-        <div *ngFor="let candidate of position.candidates" class="candidate-card">
-          <img [src]="candidate.photo" alt="{{ candidate.fullname }}" class="candidate-photo">
-          <h3>{{ candidate.fullname }}</h3>
-          <p>{{ candidate.bio }}</p>
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- No active election -->
+  <div *ngIf="!isLoading && !activeElection" class="no-election">
+    <p>No active election at the moment. Please check back later.</p>
+  </div>
+
+  <!-- Active election -->
+  <div *ngIf="!isLoading && activeElection">
+    <div class="election-info">
+      <h2>{{ activeElection.election_title }}</h2>
+      <p>{{ activeElection.election_description }}</p>
+    </div>
+
+    <div class="action-buttons">
+      <button class="vote-btn" (click)="goToVote()">Go to Voting Page</button>
+      <button class="results-btn" (click)="goToResults()">View Live Results</button>
+    </div>
+
+    <div class="positions-container">
+      <div *ngFor="let position of positions" class="position-card">
+        <div class="position-header">
+          <h2>{{ position.position_name }}</h2>
+          <span class="voted-badge" *ngIf="hasVotedFor(position.position_id)">
+            ✅ Voted
+          </span>
+        </div>
+
+        <div class="candidate-list">
+          <div *ngFor="let candidate of position.candidates" class="candidate-card">
+            <img [src]="candidate.photo" alt="{{ candidate.firstname }} {{ candidate.lastname }}"
+                 class="candidate-photo"
+                 onerror="this.src='assets/default.jpg'">
+            <h3>{{ candidate.firstname }} {{ candidate.lastname }}</h3>
+            <p>{{ candidate.bio }}</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,32 +1,53 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterModule],
+  imports: [FormsModule, RouterModule, CommonModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
 export class Login {
-
   email = '';
   password = '';
-  role = 'user';
+  errorMessage = '';
+  isLoading = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: ApiService) { }
 
   login() {
+    this.errorMessage = '';
+    this.isLoading = true;
 
-    console.log("Login attempt:", this.email, this.password);
+    this.apiService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        this.isLoading = false;
 
-    if (this.role === 'admin') {
-      this.router.navigate(['/admin']);
-    } 
-    else {
-      this.router.navigate(['/dashboard']);
-    }
+        // Save token and user info to localStorage
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
 
+        // Redirect based on role from backend
+        if (response.user.role === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        if (err.status === 404) {
+          this.errorMessage = 'User not found.';
+        } else if (err.status === 401) {
+          this.errorMessage = 'Incorrect password.';
+        } else {
+          this.errorMessage = 'Login failed. Please try again.';
+        }
+      }
+    });
   }
 }

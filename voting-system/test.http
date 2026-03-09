@@ -1,0 +1,31 @@
+### Register a test user first
+POST http://localhost:5000/users/register
+Content-Type: application/json
+x-api-key: your_api_key
+
+{
+  "student_id": 12345,
+  "firstname": "Test",
+  "lastname": "User",
+  "alias": "tester",
+  "course": "BSCS",
+  "year_level": 3,
+  "email": "test@email.com",
+  "password": "password123",
+  "role": "user"
+}
+
+### Login
+POST http://localhost:5000/users/login
+Content-Type: application/json
+x-api-key: your_api_key
+
+{
+  "email": "test@email.com",
+  "password": "password123"
+}
+```
+
+3. Click the **Send Request** button that appears above each `###` line
+
+---

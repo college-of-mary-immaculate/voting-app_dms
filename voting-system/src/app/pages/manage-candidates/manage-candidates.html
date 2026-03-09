@@ -1,14 +1,18 @@
 <div class="manage-candidates">
   <h1>Manage Candidates</h1>
-
   <button class="back-btn" (click)="goBack()">← Back</button>
-  <button class="add-btn">+ Add Candidate</button>
+  <button class="add-btn" (click)="openAddModal()">+ Add Candidate</button>
 
-  <table>
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+
+  <table *ngIf="!isLoading">
     <thead>
       <tr>
         <th>Photo</th>
-        <th>Full Name</th>
+        <th>Name</th>
+        <th>Alias</th>
         <th>Position</th>
         <th>Election</th>
         <th>Bio</th>
@@ -17,16 +21,82 @@
     </thead>
     <tbody>
       <tr *ngFor="let candidate of candidates">
-        <td><img [src]="candidate.photo" alt="{{candidate.fullname}}" class="candidate-photo"></td>
-        <td>{{candidate.fullname}}</td>
-        <td>{{candidate.position_name}}</td>
-        <td>{{candidate.election_title}}</td>
-        <td>{{candidate.bio}}</td>
         <td>
-          <button class="edit-btn">Edit</button>
-          <button class="delete-btn">Delete</button>
+          <img [src]="candidate.photo"
+               alt="{{ candidate.firstname }}"
+               class="candidate-photo"
+               onerror="this.src='assets/default.jpg'">
+        </td>
+        <td>{{ candidate.firstname }} {{ candidate.lastname }}</td>
+        <td>{{ candidate.alias }}</td>
+        <td>{{ candidate.position_name }}</td>
+        <td>{{ candidate.election_title }}</td>
+        <td>{{ candidate.bio }}</td>
+        <td>
+          <button class="edit-btn" (click)="openEditModal(candidate)">Edit</button>
+          <button class="delete-btn" (click)="confirmDelete(candidate)">Delete</button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal">
+      <h3>{{ isEditing ? 'Edit Candidate' : 'Add Candidate' }}</h3>
+
+      <label>First Name</label>
+      <input type="text" [(ngModel)]="currentCandidate.firstname" placeholder="First name">
+
+      <label>Last Name</label>
+      <input type="text" [(ngModel)]="currentCandidate.lastname" placeholder="Last name">
+
+      <label>Alias</label>
+      <input type="text" [(ngModel)]="currentCandidate.alias" placeholder="Alias/Nickname">
+
+      <label>Position</label>
+      <select [(ngModel)]="currentCandidate.position_id">
+        <option value="0" disabled>Select position</option>
+        <option *ngFor="let pos of positions" [value]="pos.position_id">
+          {{ pos.position_name }}
+        </option>
+      </select>
+
+      <label>Election</label>
+      <select [(ngModel)]="currentCandidate.election_id">
+        <option value="0" disabled>Select election</option>
+        <option *ngFor="let election of elections" [value]="election.election_id">
+          {{ election.election_title }}
+        </option>
+      </select>
+
+      <label>Photo filename</label>
+      <input type="text" [(ngModel)]="currentCandidate.photo" placeholder="photo.jpg">
+
+      <label>Bio</label>
+      <textarea [(ngModel)]="currentCandidate.bio" placeholder="Short bio"></textarea>
+
+      <div class="modal-buttons">
+        <button class="confirm-btn" (click)="saveCandidate()">
+          {{ isEditing ? 'Update' : 'Add' }}
+        </button>
+        <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal">
+      <h3>Delete Candidate</h3>
+      <p>
+        Are you sure you want to delete
+        <strong>{{ candidateToDelete?.firstname }} {{ candidateToDelete?.lastname }}</strong>?
+      </p>
+      <div class="modal-buttons">
+        <button class="delete-btn" (click)="deleteCandidate()">Delete</button>
+        <button class="cancel-btn" (click)="showDeleteModal = false">Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>
