@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
@@ -44,7 +44,11 @@ export class UserDashboard implements OnInit {
   isLoading = true;
   errorMessage = '';
 
-  constructor(private router: Router, private apiService: ApiService) { }
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
     const stored = localStorage.getItem('user');
@@ -70,6 +74,7 @@ export class UserDashboard implements OnInit {
           this.checkVoteStatus(this.activeElection.election_id);
         } else {
           this.isLoading = false;
+          this.cdr.detectChanges();
         }
       },
       error: () => {
@@ -97,6 +102,7 @@ export class UserDashboard implements OnInit {
 
         this.positions = Object.values(grouped);
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.errorMessage = 'Failed to load candidates.';

@@ -1,10 +1,6 @@
 <div class="dashboard">
   <div class="dashboard-header">
     <h1>Student Voting Dashboard</h1>
-    <div class="user-info" *ngIf="user">
-      <span>Welcome, {{ user.firstname }} {{ user.lastname }}</span>
-      <button class="logout-btn" (click)="logout()">Logout</button>
-    </div>
   </div>
 
   <div *ngIf="isLoading" class="loading">
@@ -20,6 +16,12 @@
   </div>
 
   <div *ngIf="!isLoading && activeElection">
+
+    <div class="user-info" *ngIf="user">
+      <span>Welcome, {{ user.firstname }} {{ user.lastname }}!</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+
     <div class="election-info">
       <h2>{{ activeElection.election_title }}</h2>
       <p>{{ activeElection.election_description }}</p>

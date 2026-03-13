@@ -6,8 +6,10 @@ import { Vote } from './pages/vote/vote';
 import { Results } from './pages/results/results';
 import { ManageCandidates } from './pages/manage-candidates/manage-candidates';
 import { CandidateHistory } from './pages/candidate-history/candidate-history';
+import { Register } from './pages/register/register';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
+
 
 export const appRoutes: Routes = [
   { path: '', component: Login },
@@ -19,4 +21,5 @@ export const appRoutes: Routes = [
   { path: 'admin', component: AdminDashboard, canActivate: [AdminGuard] },
   { path: 'manage-candidates', component: ManageCandidates, canActivate: [AdminGuard] },
   { path: 'candidate-history', component: CandidateHistory, canActivate: [AdminGuard] },
+  { path: 'register', component: Register }
 ];

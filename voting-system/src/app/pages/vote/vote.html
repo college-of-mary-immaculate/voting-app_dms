@@ -1,11 +1,18 @@
 <div class="vote-container">
-  <h1>Cast Your Vote</h1>
+  <div class="vote-header">
+    <h1>Vote</h1>
+  </div>
 
   <div *ngIf="isLoading" class="loading">Loading candidates...</div>
 
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
   <div *ngIf="!isLoading && positions.length > 0">
+
+    <div class="sub-header">
+      <span>Cast your vote here!</span>
+    </div>
+
     <div *ngFor="let position of positions" class="position-card">
       <div class="position-header">
         <h2>{{ position.position_name }}</h2>

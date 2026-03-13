@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
@@ -27,6 +27,7 @@ interface Position {
   templateUrl: './vote.html',
   styleUrls: ['./vote.css']
 })
+
 export class Vote implements OnInit {
   positions: Position[] = [];
   selectedVotes: { [position_id: number]: number } = {};
@@ -35,16 +36,18 @@ export class Vote implements OnInit {
   errorMessage = '';
   isSubmitting = false;
 
-  // Modal
   showConfirmModal = false;
   showVotedModal = false;
   currentCandidate: Candidate | null = null;
   currentPosition: Position | null = null;
 
-  constructor(private router: Router, private apiService: ApiService) { }
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
-    // Check if logged in
     const token = localStorage.getItem('token');
     if (!token) {
       this.router.navigate(['/']);
@@ -61,6 +64,7 @@ export class Vote implements OnInit {
         if (!active) {
           this.errorMessage = 'No active election at the moment.';
           this.isLoading = false;
+          this.cdr.detectChanges();
           return;
         }
 
@@ -82,6 +86,7 @@ export class Vote implements OnInit {
             });
             this.positions = Object.values(grouped);
             this.isLoading = false;
+            this.cdr.detectChanges();
           },
           error: () => {
             this.errorMessage = 'Failed to load candidates.';

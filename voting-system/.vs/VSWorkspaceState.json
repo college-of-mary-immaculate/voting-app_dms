@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\.angular",
-    "\\api",
-    "\\api\\middleware",
-    "\\api\\routes",
     "\\src",
     "\\src\\app",
-    "\\src\\app\\guards",
     "\\src\\app\\pages",
-    "\\src\\assets"
+    "\\src\\app\\pages\\admin-dashboard",
+    "\\src\\app\\pages\\candidate-history",
+    "\\src\\app\\pages\\manage-candidates",
+    "\\src\\app\\pages\\register",
+    "\\src\\app\\pages\\results",
+    "\\src\\app\\pages\\vote"
   ],
-  "SelectedNode": "\\src",
+  "SelectedNode": "\\src\\app\\pages\\user-dashboard\\user-dashboard.html",
   "PreviewInSolutionExplorer": false
 }

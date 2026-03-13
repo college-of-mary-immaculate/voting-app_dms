@@ -75,6 +75,8 @@ router.get("/results/:election_id", verifyApiKey, verifyToken, async (req, res) 
          c.firstname,
          c.lastname,
          c.alias,
+         c.photo,
+         c.bio,
          p.position_id,
          p.position_name,
          COUNT(v.vote_id) AS vote_count

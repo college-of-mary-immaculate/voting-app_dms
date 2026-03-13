@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { SocketService } from '../../services/socket.service';
@@ -41,7 +41,9 @@ export class Results implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private socketService: SocketService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private cdr: ChangeDetectorRef
+
   ) { }
 
   ngOnInit() {
@@ -90,6 +92,7 @@ export class Results implements OnInit, OnDestroy {
       next: (results: any[]) => {
         this.groupResults(results, electionId);
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.errorMessage = 'Failed to load results.';

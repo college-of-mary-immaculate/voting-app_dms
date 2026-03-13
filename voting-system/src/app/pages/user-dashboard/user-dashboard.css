@@ -1,13 +1,46 @@
+
+.body {
+  margin: 0px;
+  text-align: center;
+}
+
 .dashboard {
-  padding: 20px;
   text-align: center;
   background: #f3f4f6;
   min-height: 100vh;
 }
 
+.dashboard-header {
+  background: var(--primary);
+  color: white;
+  padding: 16px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+  border-radius: 8px;
+  background: #32a4d1;
+  background-image: linear-gradient(45deg, hsl(203deg 67% 48%) 0%, hsl(206deg 68% 49%) 13%, hsl(208deg 68% 50%) 19%, hsl(211deg 69% 52%) 23%, hsl(214deg 70% 53%) 27%, hsl(217deg 70% 54%) 31%, hsl(219deg 71% 55%) 34%, hsl(222deg 71% 56%) 38%, hsl(225deg 72% 57%) 41%, hsl(228deg 73% 58%) 44%, hsl(230deg 74% 60%) 47%, hsl(233deg 74% 61%) 50%, hsl(236deg 74% 62%) 53%, hsl(238deg 76% 63%) 56%, hsl(241deg 76% 64%) 59%, hsl(244deg 76% 65%) 62%, hsl(247deg 77% 66%) 66%, hsl(249deg 78% 68%) 69%, hsl(252deg 78% 69%) 73%, hsl(255deg 79% 70%) 77%, hsl(258deg 80% 71%) 81%, hsl(260deg 80% 72%) 87%, hsl(263deg 81% 74%) 100%);
+}
+
+.dashboard-header h1 {
+  color: black;
+  font-size: 50px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 30px;
+  justify-content: space-between;
+  color: black;
+  padding: 16px 20px;
+}
+
 .vote-btn {
   padding: 10px 20px;
-  background: #2563eb;
+  background: #326dee;
   color: white;
   border: none;
   border-radius: 6px;
@@ -17,6 +50,20 @@
 
 .vote-btn:hover {
   background: #1d4ed8;
+}
+
+.results-btn {
+  padding: 10px 20px;
+  background: #8a54e1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.results-btn:hover {
+    background: #7740d0;
 }
 
 .positions-container {
@@ -63,4 +110,65 @@
   object-fit: cover;
   border-radius: 50%;
   background-color: #eee;
+}
+
+.logout-btn {
+  padding: 7px 16px;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  color: rgb(0, 0, 0);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.logout-btn:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.dashboard-body {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.election-info {
+  background: var(--surface);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.election-info h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.election-info p {
+    color: var(--text-muted);
+    font-size: 16px;
+}
+
+.action-buttons {
+  display: inline-flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.position-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.position-header h2 { 
+  font-size: 24px; 
+  color: black;
+  text-align: center;
 }

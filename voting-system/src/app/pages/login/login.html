@@ -16,14 +16,16 @@
                name="password"
                required>
       </div>
-
       <div class="error-message" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
-
       <button type="submit" class="login-btn" [disabled]="isLoading">
         {{ isLoading ? 'Logging in...' : 'Login' }}
       </button>
     </form>
+    <p class="register-link">
+      Don't have an account?
+      <a routerLink="/register">Register here</a>
+    </p>
   </div>
 </div>

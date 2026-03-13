@@ -3,11 +3,11 @@
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#f3f4f6;
+    background-image: linear-gradient(45deg, hsl(203deg 67% 48%) 0%, hsl(206deg 68% 49%) 13%, hsl(208deg 68% 50%) 19%, hsl(211deg 69% 52%) 23%, hsl(214deg 70% 53%) 27%, hsl(217deg 70% 54%) 31%, hsl(219deg 71% 55%) 34%, hsl(222deg 71% 56%) 38%, hsl(225deg 72% 57%) 41%, hsl(228deg 73% 58%) 44%, hsl(230deg 74% 60%) 47%, hsl(233deg 74% 61%) 50%, hsl(236deg 74% 62%) 53%, hsl(238deg 76% 63%) 56%, hsl(241deg 76% 64%) 59%, hsl(244deg 76% 65%) 62%, hsl(247deg 77% 66%) 66%, hsl(249deg 78% 68%) 69%, hsl(252deg 78% 69%) 73%, hsl(255deg 79% 70%) 77%, hsl(258deg 80% 71%) 81%, hsl(260deg 80% 72%) 87%, hsl(263deg 81% 74%) 100%);
 }
 
 .login-card{
-    width:350px;
+    width:400px;
     padding:30px;
     background:white;
     border-radius:10px;
@@ -26,12 +26,12 @@
 .input-group label{
     display:block;
     font-weight:600;
-    margin-bottom:5px;
+    margin-bottom:25px;
 }
 
 .input-group input,
 .input-group select{
-    width:100%;
+    width:94%;
     padding:10px;
     border:1px solid #ccc;
     border-radius:5px;
@@ -50,4 +50,8 @@
 
 .login-btn:hover{
     background:#1d4ed8;
+}
+
+.a{
+    color: #4a58ea;
 }

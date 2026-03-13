@@ -1,0 +1,77 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Create Account</h2>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+
+    <form (ngSubmit)="register()">
+      <div class="input-group">
+        <input type="number"
+               placeholder="Student ID"
+               [(ngModel)]="form.student_id"
+               name="student_id"
+               required>
+      </div>
+      <div class="input-group">
+        <input type="text"
+               placeholder="First Name"
+               [(ngModel)]="form.firstname"
+               name="firstname"
+               required>
+      </div>
+      <div class="input-group">
+        <input type="text"
+               placeholder="Last Name"
+               [(ngModel)]="form.lastname"
+               name="lastname"
+               required>
+      </div>
+      <div class="input-group">
+        <input type="email"
+               placeholder="Email"
+               [(ngModel)]="form.email"
+               name="email"
+               required>
+      </div>
+      <div class="input-group">
+        <input type="password"
+               placeholder="Password"
+               [(ngModel)]="form.password"
+               name="password"
+               required>
+      </div>
+      <div class="input-group">
+        <input type="password"
+               placeholder="Confirm Password"
+               [(ngModel)]="form.confirmPassword"
+               name="confirmPassword"
+               required>
+      </div>
+      <div class="input-group">
+        <input type="text"
+               placeholder="Course (e.g. BSCS)"
+               [(ngModel)]="form.course"
+               name="course"
+               required>
+      </div>
+      <div class="input-group">
+        <select [(ngModel)]="form.year_level" name="year_level">
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+      </div>
+
+      <button type="submit" class="login-btn" [disabled]="isLoading">
+        {{ isLoading ? 'Creating account...' : 'Register' }}
+      </button>
+    </form>
+
+    <p class="register-link">
+      Already have an account?
+      <a routerLink="/">Login here</a>
+    </p>
+  </div>
+</div>
