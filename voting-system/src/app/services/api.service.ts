@@ -82,6 +82,19 @@ export class ApiService {
     );
   }
 
+  updateElection(id: number, data: any): Observable<any> {
+  return this.http.put(`${this.baseUrl}/elections/${id}`,
+    data,
+    { headers: this.getHeaders(true) }
+  );
+}
+
+deleteElection(id: number): Observable<any> {
+  return this.http.delete(`${this.baseUrl}/elections/${id}`,
+    { headers: this.getHeaders(true) }
+  );
+}
+
   // ---- CANDIDATES ----
   getCandidates(): Observable<any> {
     return this.http.get(`${this.baseUrl}/candidates`,

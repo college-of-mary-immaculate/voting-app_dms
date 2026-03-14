@@ -1,0 +1,95 @@
+<div class="manage-elections">
+
+  <div class="page-header">
+    <h1>Manage Elections</h1>
+    <div class="header-actions">
+      <button class="back-btn" (click)="goBack()">← Back</button>
+      <button class="add-btn" (click)="openAddModal()">+ New Election</button>
+    </div>
+  </div>
+
+  <div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="loading" *ngIf="isLoading">Loading elections...</div>
+
+  <table *ngIf="!isLoading">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let election of elections">
+        <td>{{ election.election_id }}</td>
+        <td>{{ election.election_title }}</td>
+        <td>{{ election.election_description }}</td>
+        <td>{{ election.start_time | date:'MMM d, y h:mm a' }}</td>
+        <td>{{ election.end_time | date:'MMM d, y h:mm a' }}</td>
+        <td>
+          <span class="badge"
+            [class.badge-active]="election.election_status === 'active'"
+            [class.badge-pending]="election.election_status === 'pending'"
+            [class.badge-closed]="election.election_status === 'closed'">
+            {{ election.election_status }}
+          </span>
+        </td>
+        <td>
+          <div class="action-row">
+            <select class="status-select"
+              [value]="election.election_status"
+              (change)="changeStatus(election, $any($event.target).value)">
+              <option value="pending">Pending</option>
+              <option value="active">Active</option>
+              <option value="closed">Closed</option>
+            </select>
+            <button class="edit-btn" (click)="openEditModal(election)">Edit</button>
+            <button class="delete-btn" (click)="openDeleteModal(election)">Delete</button>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="elections.length === 0">
+        <td colspan="7" class="no-data">No elections found.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal">
+      <h3>{{ isEditing ? 'Edit Election' : 'New Election' }}</h3>
+      <label>Title *</label>
+      <input type="text" [(ngModel)]="form.election_title" placeholder="e.g. SSC Election 2026">
+      <label>Description</label>
+      <textarea [(ngModel)]="form.election_description" placeholder="Brief description..."></textarea>
+      <label>Start Date & Time *</label>
+      <input type="datetime-local" [(ngModel)]="form.start_time">
+      <label>End Date & Time *</label>
+      <input type="datetime-local" [(ngModel)]="form.end_time">
+      <div class="modal-buttons">
+        <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+        <button class="confirm-btn" (click)="saveElection()">
+          {{ isEditing ? 'Save Changes' : 'Create' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal">
+      <h3>Delete Election</h3>
+      <p>Are you sure you want to delete <strong>{{ selectedElection?.election_title }}</strong>?</p>
+      <p class="warning-text">This cannot be undone.</p>
+      <div class="modal-buttons">
+        <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+        <button class="delete-confirm-btn" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -53,6 +53,21 @@ router.post("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res
   }
 });
 
+router.put("/:id", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
+  const { id } = req.params;
+  const { election_title, election_description, start_time, end_time } = req.body;
+
+  try {
+    await db.query(
+      `UPDATE elections SET election_title = ?, election_description = ?, start_time = ?, end_time = ? WHERE election_id = ?`,
+      [election_title, election_description, start_time, end_time, id]
+    );
+    res.json({ message: "Election updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update election", error: err.message });
+  }
+});
+
 router.put("/:id/status", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   const { id } = req.params;
   const { election_status } = req.body;

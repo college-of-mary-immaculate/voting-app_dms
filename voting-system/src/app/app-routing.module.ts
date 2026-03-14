@@ -9,7 +9,7 @@ import { CandidateHistory } from './pages/candidate-history/candidate-history';
 import { Register } from './pages/register/register';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
-
+import { ManageElections } from './pages/manage-elections/manage-elections';
 
 export const appRoutes: Routes = [
   { path: '', component: Login },
@@ -19,7 +19,8 @@ export const appRoutes: Routes = [
   { path: 'results', component: Results, canActivate: [AuthGuard] },
 
   { path: 'admin', component: AdminDashboard, canActivate: [AdminGuard] },
-  { path: 'manage-candidates', component: ManageCandidates, canActivate: [AdminGuard] },
+  { path: 'manage-candidates', component: ManageCandidates, canActivate: [AdminGuard] }, 
+  { path: 'manage-elections', component: ManageElections, canActivate: [AdminGuard] },
   { path: 'candidate-history', component: CandidateHistory, canActivate: [AdminGuard] },
   { path: 'register', component: Register }
 ];

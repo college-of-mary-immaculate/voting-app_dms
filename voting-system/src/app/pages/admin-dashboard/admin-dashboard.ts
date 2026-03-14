@@ -19,4 +19,9 @@ export class AdminDashboard {
   goToCandidateHistory() {
     this.router.navigate(['/candidate-history']);
   }
+
+  goToManageElections() {
+    this.router.navigate(['/manage-elections']);
+  }
+
 }
