@@ -9,13 +9,18 @@ const pool = mysql.createPool({
   connectionLimit: 10,
 });
 
-pool.getConnection((err, connection) => {
-  if (err) {
-    console.error("Database connection failed:", err.message);
-  } else {
-    console.log("Connected to MySQL");
-    connection.release();
-  }
-});
+const connectWithRetry = () => {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error("Database connection failed:", err.message);
+      console.log("Retrying in 5 seconds...");
+      setTimeout(connectWithRetry, 5000);
+    } else {
+      console.log("Connected to MySQL");
+      connection.release();
+    }
+  });
+};
+connectWithRetry();
 
 module.exports = pool.promise();
