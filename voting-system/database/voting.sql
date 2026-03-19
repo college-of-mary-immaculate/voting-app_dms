@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2026 at 05:21 AM
+-- Generation Time: Mar 19, 2026 at 11:44 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,22 +35,23 @@ CREATE TABLE `candidates` (
   `alias` varchar(45) NOT NULL,
   `position_id` int(10) NOT NULL,
   `photo` varchar(45) NOT NULL,
-  `bio` varchar(255) NOT NULL
+  `bio` varchar(255) NOT NULL,
+  `ballot_number` int(10) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `candidates`
 --
 
-INSERT INTO `candidates` (`candidate_id`, `election_id`, `firstname`, `lastname`, `alias`, `position_id`, `photo`, `bio`) VALUES
-(9, 1, 'Juan', 'Dela Cruz', 'JDC', 1, 'assets/juandelacruz.jpg', 'Senior student, 4th year BSCS'),
-(10, 1, 'Maria', 'Santos', 'Mars', 1, 'assets/mariasantos.jpg', 'Student council member, 3rd year'),
-(11, 1, 'Pedro', 'Reyes', 'Pete', 2, 'assets/pedroreyes.jpg', 'Active in community service'),
-(12, 1, 'Ana', 'Lopez', 'Annie', 2, 'assets/analopez.jpg', 'Excellent in academics'),
-(13, 1, 'Carlo', 'Mendoza', 'Carl', 3, 'assets/carlomendoza.jpg', 'Organized and detail-oriented'),
-(14, 1, 'Lisa', 'Garcia', 'Lis', 3, 'assets/lisagarcia.jpg', 'Former class secretary'),
-(15, 1, 'Mark', 'Villanueva', 'MV', 4, 'assets/markvillanueva.jpg', 'Finance committee member'),
-(16, 1, 'Sofia', 'Reyes', 'Sof', 4, 'assets/sofiareyes.jpg', 'Math wizard, 3rd year');
+INSERT INTO `candidates` (`candidate_id`, `election_id`, `firstname`, `lastname`, `alias`, `position_id`, `photo`, `bio`, `ballot_number`) VALUES
+(9, 1, 'Juan', 'Dela Cruz', 'JDC', 1, 'assets/juandelacruz.jpg', 'Senior student, 4th year BSCS', 1),
+(10, 1, 'Maria', 'Santos', 'Mars', 1, 'assets/mariasantos.jpg', 'Student council member, 3rd year', 2),
+(11, 1, 'Pedro', 'Reyes', 'Pete', 2, 'assets/pedroreyes.jpg', 'Active in community service', 1),
+(12, 1, 'Ana', 'Lopez', 'Annie', 2, 'assets/analopez.jpg', 'Excellent in academics', 2),
+(13, 1, 'Carlo', 'Mendoza', 'Carl', 3, 'assets/carlomendoza.jpg', 'Organized and detail-oriented', 1),
+(14, 1, 'Lisa', 'Garcia', 'Lis', 3, 'assets/lisagarcia.jpg', 'Former class secretary', 2),
+(15, 1, 'Mark', 'Villanueva', 'MV', 4, 'assets/markvillanueva.jpg', 'Finance committee member', 1),
+(16, 1, 'Sofia', 'Reyes', 'Sof', 4, 'assets/sofiareyes.jpg', 'Math wizard, 3rd year', 2);
 
 -- --------------------------------------------------------
 
@@ -123,7 +124,8 @@ INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `password`, `r
 (3, 'noya', 'nish', 'noya@gmail.com', '$2b$10$lp7EyFWvCoVHnvbK0NtPQOIz4rpPK.j83Z0v4Gglk5vNyLn0UAOgW', 'voter', '12222', 56, 'Bunsuran 1st Pandi Bulacan'),
 (4, 'cooper', 'macasa', 'cooper@gmail.com', '$2b$10$W7OaR0RhCWYzbSpRsgl8yOrRv8u/.Q9SjtqH1vwdhIcPNsvk2xDna', 'voter', '01234', 5, 'kalawakan'),
 (5, 'ke', 'mee', 'keme@gmail.com', '$2b$10$1CUlF6jHt874iWUh93BWtOLMYPE0aKsHQSaMX.ct3E/25iFN0mVrG', 'voter', '34533', 34, 'kalawakan'),
-(6, 'kae', 'dy', 'kd@gmail.com', '$2b$10$8P/erH5S8coUFGDAiMbAP.vnAK.7X2aUd2yjQd7mTwJd9wHxhOnsG', 'voter', '77777', 21, 'kalawakan');
+(6, 'kae', 'dy', 'kd@gmail.com', '$2b$10$8P/erH5S8coUFGDAiMbAP.vnAK.7X2aUd2yjQd7mTwJd9wHxhOnsG', 'voter', '77777', 21, 'kalawakan'),
+(7, 'flo', 'bu', 'florenstine@gmail.com', '$2b$10$w.qx2vAaFP9waxUn86StIusuKWjjKkv0ybCmutmTp0sGhs3g7firm', 'voter', '5738', 21, 'angat');
 
 -- --------------------------------------------------------
 
@@ -162,7 +164,11 @@ INSERT INTO `votes` (`vote_id`, `user_id`, `position_id`, `candidate_id`, `elect
 (16, 6, 1, 9, 1),
 (17, 6, 2, 12, 1),
 (18, 6, 4, 16, 1),
-(19, 6, 3, 13, 1);
+(19, 6, 3, 13, 1),
+(20, 7, 1, 10, 1),
+(21, 7, 2, 12, 1),
+(22, 7, 3, 14, 1),
+(23, 7, 4, 15, 1);
 
 --
 -- Indexes for dumped tables
@@ -233,13 +239,13 @@ ALTER TABLE `position`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `votes`
 --
 ALTER TABLE `votes`
-  MODIFY `vote_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `vote_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Constraints for dumped tables

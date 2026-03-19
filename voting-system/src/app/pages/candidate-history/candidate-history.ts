@@ -12,6 +12,7 @@ interface CandidateHistoryItem {
   election_title: string;
   election_status: string;
   vote_count: number;
+  ballot_number: number;
 }
 
 @Component({
@@ -72,7 +73,8 @@ export class CandidateHistory implements OnInit {
           position_name: r.position_name,
           election_title: election?.election_title || '',
           election_status: election?.election_status || '',
-          vote_count: r.vote_count
+          vote_count: r.vote_count,
+          ballot_number: r.ballot_number || 0  
         }));
 
         this.candidateHistory.sort((a, b) =>

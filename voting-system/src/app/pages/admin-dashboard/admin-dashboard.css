@@ -36,3 +36,20 @@
 .admin-actions button:hover {
   background: #1d4ed8;
 }
+
+.logout-btn {
+  background: #ef4444;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.header-actions {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}

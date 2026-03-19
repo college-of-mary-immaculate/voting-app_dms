@@ -1,6 +1,8 @@
 <div class="candidate-history">
-  <h1>Candidate History</h1>
-  <button class="back-btn" (click)="goBack()">← Back</button>
+  <div class="page-header">
+    <h1>Candidate History</h1>
+    <button class="back-btn" (click)="goBack()">← Back</button>
+  </div>
 
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   <div *ngIf="isLoading" class="loading">Loading...</div>
@@ -19,6 +21,7 @@
   <table *ngIf="!isLoading && candidateHistory.length > 0">
     <thead>
       <tr>
+        <th>Ballot #</th>
         <th>Candidate</th>
         <th>Alias</th>
         <th>Position</th>
@@ -29,6 +32,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let candidate of candidateHistory">
+        <td><span class="ballot-badge">{{ candidate.ballot_number }}</span></td>
         <td>{{ candidate.firstname }} {{ candidate.lastname }}</td>
         <td>{{ candidate.alias }}</td>
         <td>{{ candidate.position_name }}</td>

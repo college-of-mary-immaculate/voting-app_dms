@@ -9,21 +9,30 @@
       <div *ngFor="let position of positions" class="position-card">
         <h2 class="position-title">{{ position.position_name }}</h2>
         <div class="candidate-list">
-          <div *ngFor="let candidate of position.candidates"
-               class="candidate-card"
-               [class.user-voted]="selectedVotes[position.position_id] !== undefined">
-            <img [src]="candidate.photo" alt="{{ candidate.firstname }}"
-                 onerror="this.src='assets/default.jpg'"
-                 class="candidate-photo">
-            <h3 class="candidate-name">{{ candidate.firstname }} {{ candidate.lastname }}</h3>
-            <p class="alias">"{{ candidate.alias }}"</p>
-            <p class="candidate-bio">{{ candidate.bio }}</p>
-            <p class="vote-count">{{ candidate.vote_count }} votes</p>
-            <span *ngIf="selectedVotes[position.position_id] !== undefined"
-                  class="you-voted-label">
-              Your vote
-            </span>
+        <div *ngFor="let candidate of position.candidates"
+            class="candidate-card"
+            [class.user-voted]="selectedVotes[position.position_id] === candidate.candidate_id"
+            (mouseenter)="hoveredCandidate = candidate.candidate_id"
+            (mouseleave)="hoveredCandidate = null">
+
+          <span class="ballot-badge">No. {{ candidate.ballot_number }}</span>
+
+          <img [src]="candidate.photo" alt="{{ candidate.firstname }}"
+              onerror="this.src='assets/default.jpg'"
+              class="candidate-photo">
+          <h3 class="candidate-name">{{ candidate.firstname }} {{ candidate.lastname }}</h3>
+          <p class="alias">"{{ candidate.alias }}"</p>
+          <p class="candidate-bio">{{ candidate.bio }}</p>
+          <p class="vote-count">{{ candidate.vote_count }} votes</p>
+
+          <div class="your-vote-tooltip"
+              *ngIf="selectedVotes[position.position_id] === candidate.candidate_id && hoveredCandidate === candidate.candidate_id">
+            Your vote
           </div>
+
+          <span *ngIf="selectedVotes[position.position_id] === candidate.candidate_id"
+                class="you-voted-label">✓ Your vote</span>
+        </div>
         </div>
       </div>
     </div>

@@ -10,18 +10,20 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./admin-dashboard.css']
 })
 export class AdminDashboard {
-  constructor(private router: Router) {}
+  user: any = null;
 
-  goToManageCandidates() {
-    this.router.navigate(['/manage-candidates']);
+  constructor(private router: Router) {
+    const stored = localStorage.getItem('user');
+    if (stored) this.user = JSON.parse(stored);
   }
 
-  goToCandidateHistory() {
-    this.router.navigate(['/candidate-history']);
-  }
+  goToManageCandidates() { this.router.navigate(['/manage-candidates']); }
+  goToCandidateHistory() { this.router.navigate(['/candidate-history']); }
+  goToManageElections() { this.router.navigate(['/manage-elections']); }
 
-  goToManageElections() {
-    this.router.navigate(['/manage-elections']);
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/']);
   }
-
 }

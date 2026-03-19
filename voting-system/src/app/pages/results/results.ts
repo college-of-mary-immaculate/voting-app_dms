@@ -15,6 +15,7 @@ interface Candidate {
   photo: string;
   bio: string;
   vote_count: number;
+  ballot_number: number;
 }
 
 interface Position {
@@ -37,6 +38,7 @@ export class Results implements OnInit, OnDestroy {
   isLoading = true;
   errorMessage = '';
   private voteSub!: Subscription;
+  hoveredCandidate: number | null = null;
 
   constructor(
     private router: Router,
@@ -78,6 +80,7 @@ export class Results implements OnInit, OnDestroy {
 
         this.voteSub = this.socketService.onVoteUpdate().subscribe((results: any[]) => {
           this.groupResults(results, active.election_id);
+          this.cdr.detectChanges();
         });
       },
       error: () => {
@@ -120,7 +123,8 @@ export class Results implements OnInit, OnDestroy {
         position_id: r.position_id,
         photo: r.photo || '',
         bio: r.bio || '',
-        vote_count: r.vote_count
+        vote_count: r.vote_count,
+        ballot_number: r.ballot_number || 0
       });
     });
     this.positions = Object.values(grouped);

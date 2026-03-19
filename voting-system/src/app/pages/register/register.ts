@@ -12,16 +12,15 @@ import { ApiService } from '../../services/api.service';
   styleUrls: ['./register.css']
 })
 export class Register {
-
   form = {
     id_number: '',
     firstname: '',
     lastname: '',
     email: '',
-    age: '',
-    address: '',
     password: '',
     confirmPassword: '',
+    age: null,
+    address: '',
     role: 'voter'
   };
 
@@ -32,14 +31,11 @@ export class Register {
   constructor(private router: Router, private apiService: ApiService) {}
 
   register() {
-
-    // Validation
     if (!this.form.id_number || !this.form.firstname || !this.form.lastname ||
         !this.form.email || !this.form.password) {
       this.errorMessage = 'Please fill in all required fields.';
       return;
     }
-
     if (this.form.password !== this.form.confirmPassword) {
       this.errorMessage = 'Passwords do not match.';
       return;
@@ -52,16 +48,12 @@ export class Register {
       next: () => {
         this.isLoading = false;
         this.successMessage = 'Account created! Redirecting to login...';
-
-        setTimeout(() => {
-          this.router.navigate(['/']);
-        }, 2000);
+        setTimeout(() => this.router.navigate(['/']), 2000);
       },
       error: (err) => {
         this.isLoading = false;
-
         if (err.status === 409) {
-          this.errorMessage = 'Email or ID already registered.';
+          this.errorMessage = 'Email or ID number already registered.';
         } else {
           this.errorMessage = 'Registration failed. Please try again.';
         }

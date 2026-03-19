@@ -1,7 +1,11 @@
 <div class="manage-candidates">
-  <h1>Manage Candidates</h1>
-  <button class="back-btn" (click)="goBack()">← Back</button>
-  <button class="add-btn" (click)="openAddModal()">+ Add Candidate</button>
+  <div class="page-header">
+    <h1>Manage Candidates</h1>
+    <div class="header-actions">
+      <button class="back-btn" (click)="goBack()">← Back</button>
+      <button class="add-btn" (click)="openAddModal()">+ Add Candidate</button>
+    </div>
+  </div>
 
   <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
@@ -11,6 +15,7 @@
     <thead>
       <tr>
         <th>Photo</th>
+        <th>Ballot #</th>
         <th>Name</th>
         <th>Alias</th>
         <th>Position</th>
@@ -27,6 +32,7 @@
                class="candidate-photo"
                onerror="this.src='assets/default.jpg'">
         </td>
+        <td><span class="ballot-badge">{{ candidate.ballot_number }}</span></td>
         <td>{{ candidate.firstname }} {{ candidate.lastname }}</td>
         <td>{{ candidate.alias }}</td>
         <td>{{ candidate.position_name }}</td>
@@ -40,6 +46,7 @@
     </tbody>
   </table>
 
+  <!-- Add/Edit Modal -->
   <div class="modal-overlay" *ngIf="showModal">
     <div class="modal">
       <h3>{{ isEditing ? 'Edit Candidate' : 'Add Candidate' }}</h3>
@@ -70,7 +77,7 @@
       </select>
 
       <label>Photo filename</label>
-      <input type="text" [(ngModel)]="currentCandidate.photo" placeholder="photo.jpg">
+      <input type="text" [(ngModel)]="currentCandidate.photo" placeholder="assets/photo.jpg">
 
       <label>Bio</label>
       <textarea [(ngModel)]="currentCandidate.bio" placeholder="Short bio"></textarea>
@@ -84,11 +91,11 @@
     </div>
   </div>
 
+  <!-- Delete Modal -->
   <div class="modal-overlay" *ngIf="showDeleteModal">
     <div class="modal">
       <h3>Delete Candidate</h3>
-      <p>
-        Are you sure you want to delete
+      <p>Are you sure you want to delete
         <strong>{{ candidateToDelete?.firstname }} {{ candidateToDelete?.lastname }}</strong>?
       </p>
       <div class="modal-buttons">

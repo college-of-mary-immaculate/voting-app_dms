@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,13 +11,27 @@ import { ApiService } from '../../services/api.service';
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class Login {
+export class Login implements OnInit {
   email = '';
   password = '';
   errorMessage = '';
   isLoading = false;
 
   constructor(private router: Router, private apiService: ApiService) { }
+
+  ngOnInit() {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+
+    if (token && user) {
+      const parsed = JSON.parse(user);
+      if (parsed.role === 'admin') {
+        this.router.navigate(['/admin']);
+      } else {
+        this.router.navigate(['/dashboard']);
+      }
+    }
+  }
 
   login() {
     this.errorMessage = '';
@@ -26,7 +40,6 @@ export class Login {
     this.apiService.login(this.email, this.password).subscribe({
       next: (response) => {
         this.isLoading = false;
-
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
 

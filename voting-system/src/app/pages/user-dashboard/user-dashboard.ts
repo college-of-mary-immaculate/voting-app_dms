@@ -115,6 +115,7 @@ export class UserDashboard implements OnInit {
     this.apiService.checkVoteStatus(electionId).subscribe({
       next: (res) => {
         this.hasVotedPositions = res.votedPositions;
+        this.cdr.detectChanges();
       }
     });
   }

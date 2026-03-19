@@ -7,20 +7,20 @@ const { verifyApiKey, verifyToken, verifyRole } = require("../middleware/auth");
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
 router.post("/register", verifyApiKey, async (req, res) => {
-  const { student_id, firstname, lastname, course, year_level, email, password, role } = req.body;
+  const { firstname, lastname, email, password, role, id_number, age, address } = req.body;
   try {
     const [existing] = await db.query(
-      `SELECT user_id FROM users WHERE email = ? OR student_id = ?`,
-      [email, student_id]
+      `SELECT user_id FROM users WHERE email = ? OR id_number = ?`,
+      [email, id_number]
     );
     if (existing.length > 0) {
-      return res.status(409).json({ message: "Email or Student ID already registered" });
+      return res.status(409).json({ message: "Email or ID number already registered" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const [result] = await db.query(
-      `INSERT INTO users (student_id, firstname, lastname, course, year_level, email, password, role)
+      `INSERT INTO users (firstname, lastname, email, password, role, id_number, age, address)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [student_id, firstname, lastname, course, year_level, email, hashedPassword, role || "user"]
+      [firstname, lastname, email, hashedPassword, role || "voter", id_number, age || null, address || null]
     );
     res.status(201).json({ message: "User registered", user_id: result.insertId });
   } catch (err) {
@@ -32,10 +32,7 @@ router.post("/register", verifyApiKey, async (req, res) => {
 router.post("/login", verifyApiKey, async (req, res) => {
   const { email, password } = req.body;
   try {
-    const [rows] = await db.query(
-      `SELECT * FROM users WHERE email = ?`,
-      [email]
-    );
+    const [rows] = await db.query(`SELECT * FROM users WHERE email = ?`, [email]);
     if (rows.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -47,7 +44,7 @@ router.post("/login", verifyApiKey, async (req, res) => {
     const token = jwt.sign(
       {
         user_id: user.user_id,
-        student_id: user.student_id,
+        id_number: user.id_number,
         role: user.role,
         firstname: user.firstname,
         lastname: user.lastname
@@ -60,12 +57,12 @@ router.post("/login", verifyApiKey, async (req, res) => {
       token,
       user: {
         user_id: user.user_id,
-        student_id: user.student_id,
+        id_number: user.id_number,
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
-        course: user.course,
-        year_level: user.year_level,
+        age: user.age,
+        address: user.address,
         role: user.role
       }
     });
@@ -78,7 +75,7 @@ router.post("/login", verifyApiKey, async (req, res) => {
 router.get("/", verifyApiKey, verifyToken, verifyRole("admin"), async (req, res) => {
   try {
     const [rows] = await db.query(
-      `SELECT user_id, student_id, firstname, lastname, course, year_level, email, role FROM users`
+      `SELECT user_id, id_number, firstname, lastname, email, age, address, role FROM users`
     );
     res.json(rows);
   } catch (err) {
@@ -94,12 +91,10 @@ router.get("/:id", verifyApiKey, verifyToken, async (req, res) => {
   }
   try {
     const [rows] = await db.query(
-      `SELECT user_id, student_id, firstname, lastname, course, year_level, email, role FROM users WHERE user_id = ?`,
+      `SELECT user_id, id_number, firstname, lastname, email, age, address, role FROM users WHERE user_id = ?`,
       [requestedId]
     );
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (rows.length === 0) return res.status(404).json({ message: "User not found" });
     res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch user", error: err.message });
@@ -112,11 +107,11 @@ router.put("/:id", verifyApiKey, verifyToken, async (req, res) => {
   if (requester.role !== "admin" && requester.user_id !== requestedId) {
     return res.status(403).json({ message: "Access denied" });
   }
-  const { firstname, lastname, email, course, year_level } = req.body;
+  const { firstname, lastname, email, age, address } = req.body;
   try {
     await db.query(
-      `UPDATE users SET firstname = ?, lastname = ?, email = ?, course = ?, year_level = ? WHERE user_id = ?`,
-      [firstname, lastname, email, course, year_level, requestedId]
+      `UPDATE users SET firstname = ?, lastname = ?, email = ?, age = ?, address = ? WHERE user_id = ?`,
+      [firstname, lastname, email, age, address, requestedId]
     );
     res.json({ message: "User updated" });
   } catch (err) {

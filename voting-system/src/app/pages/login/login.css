@@ -55,3 +55,8 @@
 .a{
     color: #4a58ea;
 }
+
+.error-message{
+    color: rgb(168, 0, 0);
+    margin-top: 10px;
+}

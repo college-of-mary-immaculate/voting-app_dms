@@ -15,6 +15,7 @@ export interface Candidate {
   election_title?: string;
   photo: string;
   bio: string;
+  ballot_number: number;
 }
 
 @Component({
@@ -60,7 +61,8 @@ export class ManageCandidates implements OnInit {
       position_id: 0,
       election_id: 0,
       photo: '',
-      bio: ''
+      bio: '',
+      ballot_number: 0
     };
   }
 

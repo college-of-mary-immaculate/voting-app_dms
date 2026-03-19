@@ -42,21 +42,24 @@ router.post("/", verifyApiKey, verifyToken, async (req, res) => {
 
     const [updatedResults] = await db.query(
       `SELECT 
-         c.candidate_id,
-         c.firstname,
-         c.lastname,
-         c.alias,
-         p.position_name,
-         COUNT(v.vote_id) AS vote_count
-       FROM candidates c
-       JOIN position p ON c.position_id = p.position_id
-       LEFT JOIN votes v ON v.candidate_id = c.candidate_id AND v.election_id = ?
-       WHERE c.election_id = ?
-       GROUP BY c.candidate_id, c.firstname, c.lastname, c.alias, p.position_name
-       ORDER BY p.position_name, vote_count DESC`,
-      [election_id, election_id]
-    );
-
+        c.candidate_id,
+        c.firstname,
+        c.lastname,
+        c.alias,
+        c.photo,
+        c.bio,
+        c.ballot_number, 
+        p.position_id,
+        p.position_name,
+        COUNT(v.vote_id) AS vote_count
+      FROM candidates c
+      JOIN position p ON c.position_id = p.position_id
+      LEFT JOIN votes v ON v.candidate_id = c.candidate_id AND v.election_id = ? 
+      WHERE c.election_id = ?
+      GROUP BY c.candidate_id, c.firstname, c.lastname, c.alias, c.photo, c.bio, p.position_id, p.position_name
+      ORDER BY p.position_name, vote_count DESC`,
+    [election_id, election_id]
+  );
     req.io.to(`election_${election_id}`).emit("vote_update", updatedResults);
 
     res.status(201).json({ message: "Vote cast successfully", vote_id: result.insertId });
@@ -77,6 +80,7 @@ router.get("/results/:election_id", verifyApiKey, verifyToken, async (req, res) 
          c.alias,
          c.photo,
          c.bio,
+         c.ballot_number, 
          p.position_id,
          p.position_name,
          COUNT(v.vote_id) AS vote_count

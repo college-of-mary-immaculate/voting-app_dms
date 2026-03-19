@@ -98,3 +98,15 @@ th {
 .back-btn:hover {
   background: #4b5563;
 }
+
+.ballot-badge {
+  display: inline-block;
+  background: var(--primary);
+  color: rgb(0, 0, 0);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  min-width: 28px;
+  text-align: center;
+}

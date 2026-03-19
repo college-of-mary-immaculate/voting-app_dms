@@ -151,3 +151,22 @@
 
 .no-data { text-align: center; color: var(--text-muted); padding: 40px; }
 .loading { text-align: center; padding: 60px; color: var(--text-muted); }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  background: gray;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border-color: black;
+}
+
+.table th {
+  text-align: center;
+  padding: 12px 16px;
+  background: rgb(92, 92, 146);
+  font-size: 13px;
+  color: black;
+}

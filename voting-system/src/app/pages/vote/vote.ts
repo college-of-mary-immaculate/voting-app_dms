@@ -12,6 +12,7 @@ interface Candidate {
   position_id: number;
   photo: string;
   bio: string;
+  ballot_number: number;
 }
 
 interface Position {
@@ -131,9 +132,8 @@ export class Vote implements OnInit {
   loadVoteStatus(electionId: number) {
     this.apiService.checkVoteStatus(electionId).subscribe({
       next: (res: any) => {
-        // Only load votes for logged-in user
-        res.user_votes?.forEach((vote: any) => {
-          this.selectedVotes[vote.position_id] = vote.candidate_id;
+        res.votedPositions?.forEach((pos_id: number) => {
+          this.selectedVotes[pos_id] = -1;
         });
         this.saveVotesToLocal();
         this.cdr.detectChanges();
@@ -148,6 +148,11 @@ export class Vote implements OnInit {
     return this.selectedVotes[position_id] !== undefined;
   }
 
+  get allVoted(): boolean {
+    return this.positions.length > 0 &&
+      this.positions.every(p => this.hasVoted(p.position_id));
+  }
+  
   // =========================
   // VOTING
   // =========================
