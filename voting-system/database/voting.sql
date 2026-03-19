@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2026 at 03:12 PM
+-- Generation Time: Mar 19, 2026 at 05:21 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -103,22 +103,27 @@ INSERT INTO `position` (`position_id`, `position_name`) VALUES
 
 CREATE TABLE `users` (
   `user_id` int(10) NOT NULL,
-  `student_id` int(10) NOT NULL,
   `firstname` varchar(45) NOT NULL,
   `lastname` varchar(45) NOT NULL,
-  `course` varchar(45) NOT NULL,
-  `year_level` int(10) NOT NULL,
   `email` varchar(45) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('user','admin','','') NOT NULL
+  `role` enum('voter','admin') NOT NULL DEFAULT 'voter',
+  `id_number` varchar(50) NOT NULL,
+  `age` int(11) DEFAULT NULL,
+  `address` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `student_id`, `firstname`, `lastname`, `course`, `year_level`, `email`, `password`, `role`) VALUES
-(1, 12345, 'Test', 'User', 'BSCS', 3, 'test@email.com', '$2b$10$Chqijg0KVS4JeNZFPpL42eVSoyCOR1jKNgPaStMC1PWE7d4ZUYQrK', 'admin');
+INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `password`, `role`, `id_number`, `age`, `address`) VALUES
+(1, 'Test', 'User', 'test@email.com', '$2b$10$Chqijg0KVS4JeNZFPpL42eVSoyCOR1jKNgPaStMC1PWE7d4ZUYQrK', 'admin', '', NULL, NULL),
+(2, 'mariz', 'macasa', 'marizmacasa@gmail.com', '$2b$10$EiK.G90R.5juCmzP46H6QuidhmFbCqvjFNoKPXrnF3QPxVCDJqkmi', '', '', NULL, NULL),
+(3, 'noya', 'nish', 'noya@gmail.com', '$2b$10$lp7EyFWvCoVHnvbK0NtPQOIz4rpPK.j83Z0v4Gglk5vNyLn0UAOgW', 'voter', '12222', 56, 'Bunsuran 1st Pandi Bulacan'),
+(4, 'cooper', 'macasa', 'cooper@gmail.com', '$2b$10$W7OaR0RhCWYzbSpRsgl8yOrRv8u/.Q9SjtqH1vwdhIcPNsvk2xDna', 'voter', '01234', 5, 'kalawakan'),
+(5, 'ke', 'mee', 'keme@gmail.com', '$2b$10$1CUlF6jHt874iWUh93BWtOLMYPE0aKsHQSaMX.ct3E/25iFN0mVrG', 'voter', '34533', 34, 'kalawakan'),
+(6, 'kae', 'dy', 'kd@gmail.com', '$2b$10$8P/erH5S8coUFGDAiMbAP.vnAK.7X2aUd2yjQd7mTwJd9wHxhOnsG', 'voter', '77777', 21, 'kalawakan');
 
 -- --------------------------------------------------------
 
@@ -133,6 +138,31 @@ CREATE TABLE `votes` (
   `candidate_id` int(10) NOT NULL,
   `election_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `votes`
+--
+
+INSERT INTO `votes` (`vote_id`, `user_id`, `position_id`, `candidate_id`, `election_id`) VALUES
+(1, 2, 1, 9, 1),
+(2, 2, 4, 16, 1),
+(3, 2, 2, 11, 1),
+(4, 2, 3, 13, 1),
+(5, 3, 1, 9, 1),
+(6, 3, 2, 11, 1),
+(7, 3, 3, 14, 1),
+(8, 3, 4, 15, 1),
+(9, 4, 1, 9, 1),
+(10, 4, 4, 16, 1),
+(11, 4, 3, 13, 1),
+(12, 5, 1, 9, 1),
+(13, 5, 2, 11, 1),
+(14, 5, 3, 13, 1),
+(15, 5, 4, 15, 1),
+(16, 6, 1, 9, 1),
+(17, 6, 2, 12, 1),
+(18, 6, 4, 16, 1),
+(19, 6, 3, 13, 1);
 
 --
 -- Indexes for dumped tables
@@ -162,13 +192,16 @@ ALTER TABLE `position`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `email_2` (`email`);
 
 --
 -- Indexes for table `votes`
 --
 ALTER TABLE `votes`
   ADD PRIMARY KEY (`vote_id`),
+  ADD UNIQUE KEY `user_id_2` (`user_id`,`position_id`,`election_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `position_id` (`position_id`),
   ADD KEY `candidate_id` (`candidate_id`),
@@ -200,13 +233,13 @@ ALTER TABLE `position`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `votes`
 --
 ALTER TABLE `votes`
-  MODIFY `vote_id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `vote_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables
