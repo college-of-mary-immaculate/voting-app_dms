@@ -1,11 +1,16 @@
 <div class="vote-container">
+
   <div class="vote-header">
     <h1>Vote</h1>
   </div>
 
-  <div *ngIf="isLoading" class="loading">Loading candidates...</div>
+  <div *ngIf="isLoading" class="loading">
+    Loading candidates...
+  </div>
 
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
 
   <div *ngIf="!isLoading && positions.length > 0">
 
@@ -13,54 +18,111 @@
       <span>Cast your vote here!</span>
     </div>
 
+    <!-- LOOP POSITIONS -->
     <div *ngFor="let position of positions" class="position-card">
+
       <div class="position-header">
         <h2>{{ position.position_name }}</h2>
-        <span class="voted-badge" *ngIf="hasVoted(position.position_id)">✅ Voted</span>
+
+        <span class="voted-badge" *ngIf="hasVoted(position.position_id)">
+          Voted
+        </span>
       </div>
 
+      <!-- CANDIDATE GRID -->
       <div class="candidate-list">
+
         <div *ngFor="let candidate of position.candidates"
-             class="candidate-card"
-             [class.voted]="hasVoted(position.position_id)"
-             (click)="openVoteModal(position, candidate)">
-          <img [src]="candidate.photo" alt="{{ candidate.firstname }}"
+          class="candidate-card"
+          [class.voted]="selectedVotes[position.position_id] === candidate.candidate_id"
+          [class.disabled]="hasVoted(position.position_id) && selectedVotes[position.position_id] !== candidate.candidate_id"
+          (click)="openVoteModal(position, candidate)">
+
+          <img [src]="candidate.photo"
+               alt="{{ candidate.firstname }}"
                onerror="this.src='assets/default-avatar.png'"
                class="candidate-photo">
+
           <h3>{{ candidate.firstname }} {{ candidate.lastname }}</h3>
+
           <p class="alias">"{{ candidate.alias }}"</p>
+
           <p class="bio">{{ candidate.bio }}</p>
-          <button class="vote-btn"
-                  [disabled]="hasVoted(position.position_id)">
-            {{ hasVoted(position.position_id) ? 'Voted' : 'Vote' }}
+
+          <button
+            class="vote-btn"
+            [disabled]="hasVoted(position.position_id)">
+            {{
+              selectedVotes[position.position_id] === candidate.candidate_id
+                ? 'Voted'
+                : 'Vote'
+            }}
           </button>
+
         </div>
+
       </div>
     </div>
 
-    <button class="results-btn" (click)="goToResults()">View Live Results</button>
+    <button class="results-btn" (click)="goToResults()">
+      View Live Results
+    </button>
+
   </div>
 
+  <!-- CONFIRM MODAL -->
   <div class="modal-overlay" *ngIf="showConfirmModal">
     <div class="modal">
       <h3>Confirm Vote</h3>
+
       <p>You are voting for:</p>
-      <p><strong>{{ currentCandidate?.firstname }} {{ currentCandidate?.lastname }}</strong></p>
+
+      <p>
+        <strong>
+          {{ currentCandidate?.firstname }}
+          {{ currentCandidate?.lastname }}
+        </strong>
+      </p>
+
       <p>{{ currentPosition?.position_name }}</p>
+
       <div class="modal-buttons">
-        <button class="confirm-btn" (click)="confirmVote()" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Submitting...' : 'Confirm' }}
+        <button
+          class="confirm-btn"
+          (click)="confirmVote()"
+          [disabled]="isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">Confirm Vote</span>
+          <span *ngIf="isSubmitting">Submitting...</span>
         </button>
-        <button class="cancel-btn" (click)="cancelVote()">Cancel</button>
+
+        <button class="cancel-btn" (click)="cancelVote()">
+          Cancel
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- SUCCESS MODAL -->
   <div class="modal-overlay" *ngIf="showVotedModal">
     <div class="modal">
+
       <h3>✅ Vote Cast!</h3>
-      <p>Your vote for <strong>{{ currentCandidate?.firstname }} {{ currentCandidate?.lastname }}</strong> has been recorded.</p>
-      <button class="confirm-btn" (click)="closeVotedModal()">OK</button>
+
+      <p>
+        Your vote for
+        <strong>
+          {{ currentCandidate?.firstname }}
+          {{ currentCandidate?.lastname }}
+        </strong>
+        has been recorded.
+      </p>
+
+      <button class="confirm-btn" (click)="closeVotedModal()">
+        OK
+      </button>
+
     </div>
   </div>
+
 </div>

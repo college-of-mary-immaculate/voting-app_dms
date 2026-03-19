@@ -12,29 +12,31 @@ import { ApiService } from '../../services/api.service';
   styleUrls: ['./register.css']
 })
 export class Register {
+
   form = {
-    student_id: '',
+    id_number: '',
     firstname: '',
     lastname: '',
     email: '',
+    age: '',
+    address: '',
     password: '',
     confirmPassword: '',
-    course: '',
-    year_level: 1,
-    role: 'user'
+    role: 'voter'
   };
 
   isLoading = false;
   errorMessage = '';
   successMessage = '';
 
-  constructor(private router: Router, private apiService: ApiService) { }
+  constructor(private router: Router, private apiService: ApiService) {}
 
   register() {
-    // Basic validation
-    if (!this.form.student_id || !this.form.firstname || !this.form.lastname ||
-      !this.form.email || !this.form.password || !this.form.course) {
-      this.errorMessage = 'Please fill in all fields.';
+
+    // Validation
+    if (!this.form.id_number || !this.form.firstname || !this.form.lastname ||
+        !this.form.email || !this.form.password) {
+      this.errorMessage = 'Please fill in all required fields.';
       return;
     }
 
@@ -50,12 +52,16 @@ export class Register {
       next: () => {
         this.isLoading = false;
         this.successMessage = 'Account created! Redirecting to login...';
-        setTimeout(() => this.router.navigate(['/']), 2000);
+
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 2000);
       },
       error: (err) => {
         this.isLoading = false;
+
         if (err.status === 409) {
-          this.errorMessage = 'Email or Student ID already registered.';
+          this.errorMessage = 'Email or ID already registered.';
         } else {
           this.errorMessage = 'Registration failed. Please try again.';
         }

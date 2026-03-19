@@ -1,8 +1,15 @@
 .results-page {
-  padding: 20px;
-  text-align: center;
-  background: #f3f4f6;
+  display: flex;
+  justify-content: center;  /* vertical centering */
   min-height: 100vh;
+  background: #f3f4f6;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.results-wrapper {
+  width: 100%;
+  max-width: 1200px;       /* optional: constrain width */
 }
 
 h1 {
@@ -14,7 +21,6 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  align-items: center;
 }
 
 .position-card {
@@ -22,8 +28,6 @@ h1 {
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  width: 90%;
-  max-width: 900px;
 }
 
 .position-title {
@@ -39,15 +43,10 @@ h1 {
 }
 
 .candidate-card {
-  background: #e5e7eb;
-  border-radius: 10px;
-  padding: 15px;
   width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.2s;
-  position: relative;
 }
 
 .candidate-card:hover {

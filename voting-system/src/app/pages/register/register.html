@@ -6,13 +6,17 @@
     <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
 
     <form (ngSubmit)="register()">
+
+      <!-- ID Number -->
       <div class="input-group">
-        <input type="number"
-               placeholder="Student ID"
-               [(ngModel)]="form.student_id"
-               name="student_id"
+        <input type="text"
+               placeholder="ID Number (Student ID / Voter ID)"
+               [(ngModel)]="form.id_number"
+               name="id_number"
                required>
       </div>
+
+      <!-- First Name -->
       <div class="input-group">
         <input type="text"
                placeholder="First Name"
@@ -20,6 +24,8 @@
                name="firstname"
                required>
       </div>
+
+      <!-- Last Name -->
       <div class="input-group">
         <input type="text"
                placeholder="Last Name"
@@ -27,6 +33,8 @@
                name="lastname"
                required>
       </div>
+
+      <!-- Email -->
       <div class="input-group">
         <input type="email"
                placeholder="Email"
@@ -34,6 +42,24 @@
                name="email"
                required>
       </div>
+
+      <!-- Age -->
+      <div class="input-group">
+        <input type="number"
+               placeholder="Age (optional)"
+               [(ngModel)]="form.age"
+               name="age">
+      </div>
+
+      <!-- Address -->
+      <div class="input-group">
+        <input type="text"
+               placeholder="Address / Location (optional)"
+               [(ngModel)]="form.address"
+               name="address">
+      </div>
+
+      <!-- Password -->
       <div class="input-group">
         <input type="password"
                placeholder="Password"
@@ -41,6 +67,8 @@
                name="password"
                required>
       </div>
+
+      <!-- Confirm Password -->
       <div class="input-group">
         <input type="password"
                placeholder="Confirm Password"
@@ -48,25 +76,12 @@
                name="confirmPassword"
                required>
       </div>
-      <div class="input-group">
-        <input type="text"
-               placeholder="Course (e.g. BSCS)"
-               [(ngModel)]="form.course"
-               name="course"
-               required>
-      </div>
-      <div class="input-group">
-        <select [(ngModel)]="form.year_level" name="year_level">
-          <option value="1">1st Year</option>
-          <option value="2">2nd Year</option>
-          <option value="3">3rd Year</option>
-          <option value="4">4th Year</option>
-        </select>
-      </div>
 
+      <!-- Submit -->
       <button type="submit" class="login-btn" [disabled]="isLoading">
         {{ isLoading ? 'Creating account...' : 'Register' }}
       </button>
+
     </form>
 
     <p class="register-link">
