@@ -3,7 +3,7 @@
   <div class="page-header">
     <h1>Manage Elections</h1>
     <div class="header-actions">
-      <button class="back-btn" (click)="goBack()">← Back</button>
+      <button class="back-btn" (click)="goBack()">Back</button>
       <button class="add-btn" (click)="openAddModal()">+ New Election</button>
     </div>
   </div>
@@ -49,8 +49,10 @@
               <option value="active">Active</option>
               <option value="closed">Closed</option>
             </select>
-            <button class="edit-btn" (click)="openEditModal(election)">Edit</button>
-            <button class="delete-btn" (click)="openDeleteModal(election)">Delete</button>
+            <div class="action-buttons">
+              <button class="edit-btn" (click)="openEditModal(election)">Edit</button>
+              <button class="delete-btn" (click)="openDeleteModal(election)">Delete</button>
+            </div>
           </div>
         </td>
       </tr>

@@ -1,13 +1,28 @@
 .candidate-history {
   padding: 30px;
-  background: #f9fafb;
   text-align: center;
+  background: #f9fafb;
+  font-family: 'Inter', sans-serif;
   min-height: 100vh;
 }
 
 h1 {
   margin-bottom: 25px;
   color: #111827;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #dde3ea;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
 }
 
 table {
@@ -35,7 +50,7 @@ th {
   background: #6b7280; 
   color: white;
   font-weight: bold;
-  padding: 8px 15px;
+  padding: 10px 20px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
@@ -57,4 +72,30 @@ th {
   border-radius: 999px;
   min-width: 28px;
   text-align: center;
+}
+
+.election-filter {
+  margin-bottom: 15px;
+  display: flex;
+  align-content: flex-start;
+}
+
+.election-filter label {
+  margin-right: 10px;
+  font-weight: 500;
+  color: #374151;
+  padding: 8px 12px;
+}
+
+.election-filter select {
+  width: 40%;
+  padding: 8px 12px;
+  border: 1.5px solid #dde3ea;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.election-filter select:focus {
+  outline: none;
+  border-color: #2563eb;
 }

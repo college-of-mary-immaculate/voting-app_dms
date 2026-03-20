@@ -2,7 +2,7 @@
   <div class="page-header">
     <h1>Manage Candidates</h1>
     <div class="header-actions">
-      <button class="back-btn" (click)="goBack()">← Back</button>
+      <button class="back-btn" (click)="goBack()">Back</button>
       <button class="add-btn" (click)="openAddModal()">+ Add Candidate</button>
     </div>
   </div>
@@ -95,8 +95,8 @@
   <div class="modal-overlay" *ngIf="showDeleteModal">
     <div class="modal">
       <h3>Delete Candidate</h3>
-      <p>Are you sure you want to delete
-        <strong>{{ candidateToDelete?.firstname }} {{ candidateToDelete?.lastname }}</strong>?
+      <p>Are you sure you want to remove
+        <strong>{{ candidateToDelete?.firstname }} {{ candidateToDelete?.lastname }}</strong> as a candidate in this election?
       </p>
       <div class="modal-buttons">
         <button class="delete-btn" (click)="deleteCandidate()">Delete</button>

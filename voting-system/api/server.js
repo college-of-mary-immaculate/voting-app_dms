@@ -4,11 +4,11 @@ const http = require("http");
 const { Server } = require("socket.io");
 
 const app = express();
-const server = http.createServer(app); // wrap express with http
+const server = http.createServer(app); 
 
 const io = new Server(server, {
   cors: {
-    origin: "*", // update this to your frontend URL in production
+    origin: "*", 
     methods: ["GET", "POST"]
   }
 });
@@ -22,7 +22,7 @@ const { verifyApiKey, verifyToken } = require("./middleware/auth");
 app.use(cors());
 app.use(express.json());
 
-// Attach io to every request so routes can emit events
+
 app.use((req, res, next) => {
   req.io = io;
   next();

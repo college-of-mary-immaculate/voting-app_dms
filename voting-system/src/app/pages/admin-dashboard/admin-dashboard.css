@@ -7,6 +7,7 @@
   background: #f3f4f6;
   font-family: 'Inter', sans-serif;
   text-align: center;
+  position: relative;
 }
 
 .admin-dashboard h1 {
@@ -19,6 +20,7 @@
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .admin-actions button {
@@ -39,7 +41,7 @@
 
 .logout-btn {
   background: #ef4444;
-  color: rgb(0, 0, 0);
+  color: white;
   font-weight: bold;
   padding: 10px 20px;
   border-radius: 6px;

@@ -1,7 +1,9 @@
 <div class="candidate-history">
   <div class="page-header">
     <h1>Candidate History</h1>
-    <button class="back-btn" (click)="goBack()">← Back</button>
+    <div class="header-actions">
+      <button class="back-btn" (click)="goBack()">Back</button>
+    </div>
   </div>
 
   <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
